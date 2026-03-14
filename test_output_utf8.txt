@@ -1,0 +1,833 @@
+﻿  console.log
+    [S4-DB] All S/4HANA tables created: S4_EQUIPMENT, S4_FUNCTIONALLOCATION, S4_MAINTPLAN, S4_MAINTENANCENOTIFICATION, S4_MAINTENANCEORDER, S4_MAINTENANCEORDER_OPERATION, S4_MAINTPLAN_ITEM
+
+      at log (src/v4/database/index.js:32:13)
+
+  console.log
+    [DB] All 11 SAP PM tables created successfully:
+
+      at log (src/database/index.js:58:13)
+
+  console.log
+    [DB]   IFLOT, MARA, EQUI, QMEL, AUFK, AFKO, RESB, MSEG, MMPT, PLPO, IMPTT
+
+      at log (src/database/index.js:59:13)
+
+  console.log
+    [DB] Database path: ./database.db
+
+      at log (src/database/index.js:60:13)
+
+node.exe : FAIL src/v4/
+tests/maintNotification
+.test.js
+No linha:1 caractere:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (FAIL src/v4/t   
+ es...ication.test.    
+js:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ CSRF 
+Token Fetch ÔÇ║ should 
+fetch a CSRF token
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ GET /Main
+tenanceNotificationColl
+ection ÔÇ║ should 
+return a list of 
+notifications
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ GET /Main
+tenanceNotificationColl
+ection ÔÇ║ should 
+filter notifications 
+by NotificationType
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ GET /Main
+tenanceNotificationColl
+ection('{id}') ÔÇ║ 
+should return a single 
+notification
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ GET /Main
+tenanceNotificationColl
+ection('{id}') ÔÇ║ 
+should return 404 for 
+non-existent 
+notification
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ POST /Mai
+ntenanceNotificationCol
+lection ÔÇ║ should 
+fail with missing 
+required fields
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ POST /Mai
+ntenanceNotificationCol
+lection ÔÇ║ should 
+fail with invalid 
+equipment FK
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ POST /Mai
+ntenanceNotificationCol
+lection ÔÇ║ should 
+create a notification 
+with valid payload
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ PATCH /Ma
+intenanceNotificationCo
+llection('{id}') ÔÇ║ 
+should update a 
+notification
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should set an 
+outstanding 
+notification to In 
+Process
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should fail to set an 
+in-process 
+notification to In 
+Process again
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should fail to 
+complete an 
+outstanding 
+notification
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should complete an 
+in-process notification
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should postpone an 
+outstanding 
+notification
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should fail to 
+postpone a completed 
+notification
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ 
+Navigation: 
+to_MaintenanceOrder 
+ÔÇ║ should return 
+orders linked to 
+notification
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 15 
+|[39m   beforeAll(() 
+[33m=>[39m {
+     [90m 16 |[39m   
+  [90m// Insert dummy 
+Equipment to satisfy 
+FK constraint[39m
+    [31m[1m>[22m[39
+m[90m 17 |[39m     db
+[33m.[39mprepare([32
+m`[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 18 |[39m 
+[32m      INSERT OR 
+IGNORE INTO 
+S4_EQUIPMENT [39m
+     [90m 19 |[39m 
+[32m      (Equipment, 
+EquipmentName, 
+EquipmentCategory, 
+MaintenancePlant) [39m
+     [90m 20 |[39m 
+[32m      VALUES (?, 
+'Test Equipment FK', 
+'M', '1000')[39m[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:17:8)
+
+
+  ÔùÅ Test suite 
+failed to run
+
+    TypeError: 
+db.prepare is not a 
+function
+
+    [0m [90m 38 
+|[39m   afterAll(() 
+[33m=>[39m {
+     [90m 39 |[39m   
+  [90m// Cleanup[39m
+    [31m[1m>[22m[39
+m[90m 40 |[39m     db
+[33m.[39mprepare([32
+m'DELETE FROM 
+S4_MAINTENANCEORDER 
+WHERE MaintenanceOrder 
+= ?'[39m)[33m.[39mru
+n([32m'ORD-TEST-001'[
+39m)[33m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 41 |[39m   
+  db[33m.[39mprepare(
+[32m'DELETE FROM S4_MA
+INTENANCENOTIFICATION 
+WHERE MaintenanceNotifi
+cation = ?'[39m)[33m.
+[39mrun(newNotificatio
+nId)[33m;[39m
+     [90m 42 |[39m   
+  [36mif[39m (created
+NotificationId) {
+     [90m 43 |[39m   
+      db[33m.[39mprep
+are([32m'DELETE FROM S
+4_MAINTENANCENOTIFICATI
+ON WHERE MaintenanceNot
+ification = ?'[39m)[3
+3m.[39mrun(createdNoti
+ficationId)[33m;[39m
+[0m
+
+      at 
+Object.prepare (src/v4/
+tests/maintNotification
+.test.js:40:8)
+
+Test Suites: 1 failed, 
+1 total
+Tests:       16 
+failed, 16 total
+Snapshots:   0 total
+Time:        1.416 s, 
+estimated 2 s
+Ran all test suites 
+matching /src\\v4\\test
+s\\maintNotification.te
+st.js/i.

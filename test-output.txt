@@ -1,0 +1,134 @@
+﻿  console.log
+    [DB] All 11 SAP PM tables created successfully:
+
+      at log (src/database/index.js:57:13)
+
+  console.log
+    [DB]   IFLOT, MARA, EQUI, QMEL, AUFK, AFKO, RESB, MSEG, MMPT, PLPO, IMPTT
+
+      at log (src/database/index.js:58:13)
+
+  console.log
+    [DB] Database path: C:\Users\Usuario\Documents\sap-pm-emulator\data\sap_pm.db
+
+      at log (src/database/index.js:59:13)
+
+  console.log
+    [DB] All 11 SAP PM tables created successfully:
+
+      at log (src/database/index.js:57:13)
+
+  console.log
+    [DB]   IFLOT, MARA, EQUI, QMEL, AUFK, AFKO, RESB, MSEG, MMPT, PLPO, IMPTT
+
+      at log (src/database/index.js:58:13)
+
+  console.log
+    [DB] Database path: C:\Users\Usuario\Documents\sap-pm-emulator\data\sap_pm.db
+
+      at log (src/database/index.js:59:13)
+
+POST	/sap/opu/odata/sap/PM_FUNCLOC_SRV/IFLOTSet	201	3.798 ms	2026-03-11T02:33:54.079Z
+POST	/sap/opu/odata/sap/PM_FUNCLOC_SRV/IFLOTSet	400	0.480 ms	2026-03-11T02:33:54.093Z
+POST	/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet	201	4.205 ms	2026-03-11T02:33:54.093Z
+GET	/sap/opu/odata/sap/PM_FUNCLOC_SRV/IFLOTSet	200	2.761 ms	2026-03-11T02:33:54.102Z
+POST	/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet	400	0.551 ms	2026-03-11T02:33:54.109Z
+GET	/sap/opu/odata/sap/PM_FUNCLOC_SRV/IFLOTSet('FLTEST-001')	200	1.265 ms	2026-03-11T02:33:54.110Z
+GET	/sap/opu/odata/sap/PM_FUNCLOC_SRV/IFLOTSet('NONEXISTENT')	404	0.815 ms	2026-03-11T02:33:54.118Z
+GET	/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet	200	3.387 ms	2026-03-11T02:33:54.120Z
+PUT	/sap/opu/odata/sap/PM_FUNCLOC_SRV/IFLOTSet('FLTEST-001')	200	1.123 ms	2026-03-11T02:33:54.126Z
+GET	/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet('EQTEST001')	200	1.327 ms	2026-03-11T02:33:54.128Z
+PATCH	/sap/opu/odata/sap/PM_FUNCLOC_SRV/IFLOTSet('FLTEST-001')	200	1.055 ms	2026-03-11T02:33:54.133Z
+GET	/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet('NONEXISTENT')	404	0.841 ms	2026-03-11T02:33:54.136Z
+DELETE	/sap/opu/odata/sap/PM_FUNCLOC_SRV/IFLOTSet('FLTEST-001')	204	1.292 ms	2026-03-11T02:33:54.140Z
+PUT	/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet('EQTEST001')	200	1.129 ms	2026-03-11T02:33:54.144Z
+node.exe : PASS 
+src/tests/iflot.test.js
+No linha:1 caractere:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/test   
+ s/iflot.test.js:St    
+ring) [], RemoteEx    
+ception
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+  IFLOTSet CRUD
+    ÔêÜ POST valid 
+functional location 
+returns 201 with d 
+object (94 ms)
+    ÔêÜ POST without 
+TPLNR returns 400 (9 
+ms)
+    ÔêÜ GET list 
+returns 200 with 
+d.results array (9 ms)
+    ÔêÜ GET single 
+functional location 
+returns 200 with d 
+object (7 ms)
+    ÔêÜ GET 
+non-existent 
+functional location 
+returns 404 (7 ms)
+    ÔêÜ PUT updates 
+functional location 
+and returns 200 (7 ms)
+    ÔêÜ PATCH 
+partially updates 
+functional location 
+and returns 200 (8 ms)
+    ÔêÜ DELETE 
+functional location 
+returns 204 (8 ms)
+
+PATCH	/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet('EQTEST001')	200	1.356 ms	2026-03-11T02:33:54.153Z
+DELETE	/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet('EQTEST001')	204	0.952 ms	2026-03-11T02:33:54.161Z
+PASS 
+src/tests/equi.test.js
+  EQUISet CRUD
+    ÔêÜ POST valid 
+equipment returns 201 
+with d object (101 ms)
+    ÔêÜ POST without 
+EQUNR returns 400 (10 
+ms)
+    ÔêÜ GET list 
+returns 200 with 
+d.results array (11 ms)
+    ÔêÜ GET single 
+equipment returns 200 
+with d object (8 ms)
+    ÔêÜ GET 
+non-existent equipment 
+returns 404 (7 ms)
+    ÔêÜ PUT updates 
+equipment and returns 
+200 (8 ms)
+    ÔêÜ PATCH 
+partially updates 
+equipment and returns 
+200 (9 ms)
+    ÔêÜ DELETE 
+equipment returns 204 
+(7 ms)
+
+Test Suites: 2 passed, 
+2 total
+Tests:       16 
+passed, 16 total
+Snapshots:   0 total
+Time:        3.201 s
+Ran all test suites.

@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAP PM Emulator - Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Design Variables */
+    :root {
+      --bg-dark: #0a0e1a;
+      --bg-panel: #111827;
+      --bg-panel-hover: #1f2937;
+      --border-color: #1f2937;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-color: #3b82f6; /* Blue for ECC */
+      --card-gradient: linear-gradient(145deg, #111827 0%, #0f172a 100%);
+      
+      --badge-get: #3b82f6;
+      --badge-get-bg: rgba(59, 130, 246, 0.15);
+      --badge-post: #10b981;
+      --badge-post-bg: rgba(16, 185, 129, 0.15);
+      --badge-patch: #f59e0b;
+      --badge-patch-bg: rgba(245, 158, 11, 0.15);
+      --badge-delete: #ef4444;
+      --badge-delete-bg: rgba(239, 68, 68, 0.15);
+    }
+
+    body.mode-s4 {
+      --accent-color: #00c853; /* Green for S/4HANA */
+      --badge-get: #00c853;
+      --badge-get-bg: rgba(0, 200, 83, 0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    header h1::before {
+      content: '';
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background-color: var(--accent-color);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-color);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .mode-badge {
+      font-size: 0.875rem;
+      color: var(--accent-color);
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      background: var(--bg-panel-hover);
+      border: 1px solid var(--border-color);
+      transition: color 0.3s;
+    }
+
+    /* Toggle Switch */
+    .mode-toggle {
+      display: flex;
+      background: var(--bg-panel-hover);
+      border-radius: 9999px;
+      padding: 0.25rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .toggle-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .toggle-btn.active.ecc {
+      background: #3b82f6;
+      color: #fff;
+    }
+    
+    .toggle-btn.active.s4 {
+      background: #00c853;
+      color: #fff;
+    }
+
+    /* Main Container */
+    .container {
+      padding: 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .kpi-card {
+      background: var(--card-gradient);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+      border-color: #374151;
+    }
+    
+    .kpi-title {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .kpi-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Additional S/4HANA Panels (Gauge + Chart) */
+    .s4-panels {
+      display: none;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+    }
+
+    body.mode-s4 .s4-panels {
+      display: grid;
+    }
+
+    @media (max-width: 1024px) {
+      .s4-panels { grid-template-columns: 1fr; }
+    }
+
+    /* Compliance Gauge */
+    .gauge-wrapper {
+      position: relative;
+      width: 160px;
+      height: 80px;
+      overflow: hidden;
+      margin: 1.5rem auto 0;
+    }
+    
+    .gauge-bg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      border: 16px solid #374151;
+      box-sizing: border-box;
+    }
+    
+    .gauge-fill {
+      position: absolute;
+      top: 0; left: 0;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      border: 16px solid var(--accent-color);
+      border-bottom-color: transparent !important;
+      border-right-color: transparent !important;
+      box-sizing: border-box;
+      transform: rotate(-135deg); /* 0% */
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .gauge-value {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .gauge-label {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Bar Chart for Phases */
+    .bar-chart {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-top: 1rem;
+      padding: 0 1rem;
+    }
+    
+    .bar-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .bar-label {
+      width: 130px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    
+    .bar-track {
+      flex: 1;
+      height: 14px;
+      background: #374151;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    
+    .bar-fill-inner {
+      height: 100%;
+      width: 0%;
+      border-radius: 9999px;
+      transition: width 1s ease-out;
+    }
+    
+    .bar-fill-Outstanding { background: #f97316; } /* orange */
+    .bar-fill-In-Process { background: #3b82f6; } /* blue */
+    .bar-fill-Completed { background: #22c55e; } /* green */
+    .bar-fill-Postponed { background: #9ca3af; } /* gray */
+    
+    .bar-count {
+      width: 40px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Main Grid: Activity Log + Quick Actions */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      flex: 1;
+    }
+    
+    @media (max-width: 1024px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Panels */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .panel-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .panel-header .indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--accent-color);
+      transition: color 0.3s;
+    }
+    
+    .pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      transition: background 0.3s;
+    }
+    
+    /* Dynamic pulse glow for ECC vs S4 */
+    body.mode-ecc .pulse {
+      animation: pulse-ecc 2s infinite;
+    }
+    body.mode-s4 .pulse {
+      animation: pulse-s4 2s infinite;
+    }
+    
+    @keyframes pulse-ecc {
+      0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+      70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+    }
+    @keyframes pulse-s4 {
+      0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7); }
+      70% { box-shadow: 0 0 0 6px rgba(0, 200, 83, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
+    }
+
+    /* Activity Log Table */
+    .log-container {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 500px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    
+    th {
+      background: #0f172a;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    
+    td {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.875rem;
+    }
+    
+    tbody tr:hover {
+      background: var(--bg-panel-hover);
+    }
+    
+    .time-cell { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+    .status-cell { font-weight: 600; }
+    .status-200, .status-201, .status-204 { color: var(--badge-post); }
+    .status-400, .status-404 { color: var(--badge-patch); }
+    .status-500 { color: var(--badge-delete); }
+    
+    .endpoint-cell {
+      font-family: monospace;
+      color: #93c5fd;
+      background: rgba(147, 197, 253, 0.1);
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+    }
+    
+    .term-cell {
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    /* Method Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .badge.GET { color: var(--badge-get); background: var(--badge-get-bg); }
+    .badge.POST { color: var(--badge-post); background: var(--badge-post-bg); }
+    .badge.PATCH, .badge.PUT { color: var(--badge-patch); background: var(--badge-patch-bg); }
+    .badge.DELETE { color: var(--badge-delete); background: var(--badge-delete-bg); }
+
+    /* Quick Actions */
+    .actions-list {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .action-btn {
+      background: var(--card-gradient);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 1rem 1.25rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .action-btn:hover {
+      background: #1f2937;
+      border-color: #4b5563;
+      transform: translateX(4px);
+    }
+    
+    .action-btn i {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      font-style: normal;
+      font-size: 14px;
+    }
+    
+    .btn-create-nota i { background: var(--badge-post-bg); color: var(--badge-post); }
+    .btn-create-ordem i { background: var(--badge-get-bg); color: var(--badge-get); }
+    .btn-consultar i { background: var(--badge-patch-bg); color: var(--badge-patch); }
+
+    /* Toast Notification */
+    #toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 50;
+    }
+    
+    .toast {
+      background: #1f2937;
+      border-left: 4px solid var(--accent-color);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 0.25rem;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s ease-out forwards;
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    
+    @keyframes slideIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="mode-ecc">
+
+  <header>
+    <h1>SAP PM Emulator</h1>
+    <div class="header-right">
+      <span class="mode-badge" id="mode-badge-text">SAP ECC Emulator</span>
+      <div class="mode-toggle">
+        <button class="toggle-btn active ecc" onclick="setMode('ecc')" id="mode-ecc-btn">
+          🔵 SAP ECC
+        </button>
+        <button class="toggle-btn s4" onclick="setMode('s4')" id="mode-s4-btn">
+          🟢 S/4HANA
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- KPI Row -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title" id="kpi-title-1">Total Equipamentos</div>
+        <div class="kpi-value" id="kpi-val-1">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title" id="kpi-title-2">Notas Abertas</div>
+        <div class="kpi-value" id="kpi-val-2">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title" id="kpi-title-3">Ordens em Execução</div>
+        <div class="kpi-value" id="kpi-val-3">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title" id="kpi-title-4">Planos Preventivos</div>
+        <div class="kpi-value" id="kpi-val-4">-</div>
+      </div>
+    </div>
+
+    <!-- S/4HANA Exclusive Panels (Compliance Gauge & Phase Chart) -->
+    <div class="s4-panels" id="s4-exclusive-panels">
+      <div class="panel">
+        <div class="panel-header">Preventive Compliance</div>
+        <div class="gauge-wrapper">
+          <div class="gauge-bg"></div>
+          <div class="gauge-fill" id="compliance-gauge"></div>
+          <div class="gauge-value" id="compliance-text">0%</div>
+        </div>
+        <div class="gauge-label">Compliance Rate</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">Notifications by Phase</div>
+        <div class="bar-chart" id="phase-chart-container">
+          <!-- Phase bars will be injected here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-grid">
+      
+      <!-- Activity Log Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span>Activity Log</span>
+          <div class="indicator">
+            <div class="pulse"></div> Live
+          </div>
+        </div>
+        <div class="log-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Horário</th>
+                <th>Method</th>
+                <th>Endpoint SAP</th>
+                <th>Objeto SAP</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="log-body">
+              <tr>
+                <td colspan="5" style="text-align: center; color: #6b7280;">Carregando logs...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Quick Actions Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          Quick Actions
+        </div>
+        <div class="actions-list">
+          <button class="action-btn btn-create-nota" onclick="triggerAction('nota')">
+            <i>📝</i> Criar Nota de Manutenção
+          </button>
+          <button class="action-btn btn-create-ordem" onclick="triggerAction('ordem')">
+            <i>🔧</i> Abrir Ordem Corretiva
+          </button>
+          <button class="action-btn btn-consultar" onclick="triggerAction('criticos')">
+            <i>⚠️</i> Consultar Equipamentos Críticos
+          </button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script>
+    let currentMode = 'ecc';
+
+    // --- Mode Toggle ---
+    const setMode = (mode) => {
+      if (currentMode === mode) return;
+      currentMode = mode;
+      
+      // Update body class
+      document.body.className = `mode-${mode}`;
+      
+      // Update toggle buttons
+      document.getElementById('mode-ecc-btn').classList.toggle('active', mode === 'ecc');
+      document.getElementById('mode-s4-btn').classList.toggle('active', mode === 's4');
+      
+      // Update badge text
+      const badge = document.getElementById('mode-badge-text');
+      badge.textContent = mode === 'ecc' ? 'SAP ECC Emulator' : 'SAP S/4HANA Emulator';
+      
+      // Update KPI Titles
+      document.getElementById('kpi-title-1').textContent = mode === 'ecc' ? 'Total Equipamentos (EQUI)' : 'Total Equipment';
+      document.getElementById('kpi-title-2').textContent = mode === 'ecc' ? 'Notas Abertas (QMEL / ABER)' : 'Open Notifications';
+      document.getElementById('kpi-title-3').textContent = mode === 'ecc' ? 'Ordens em Execução (AUFK / REL)' : 'Released Orders';
+      document.getElementById('kpi-title-4').textContent = mode === 'ecc' ? 'Planos Preventivos (MMPT)' : 'Active Plans';
+
+      // Reset values to show loading state slightly
+      document.getElementById('kpi-val-1').textContent = '-';
+      document.getElementById('kpi-val-2').textContent = '-';
+      document.getElementById('kpi-val-3').textContent = '-';
+      document.getElementById('kpi-val-4').textContent = '-';
+
+      // Fetch new data
+      fetchKPIs();
+      fetchLogs();
+      if (mode === 's4') fetchS4Analytics();
+    };
+
+    // --- Utilities ---
+    const showToast = (message, isError = false) => {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      if (isError) {
+         toast.style.borderLeftColor = 'var(--badge-delete)';
+      }
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    };
+
+    const formatTime = (isoString) => {
+      const d = new Date(isoString);
+      return d.toLocaleTimeString('pt-BR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '.' + d.getMilliseconds().toString().padStart(3, '0');
+    };
+
+    // --- Terminology Mapping ---
+    const mapTerminology = (url) => {
+      if (url.includes('API_EQUIPMENT')) return 'Equipment (API)';
+      if (url.includes('API_MAINTNOTIFICATION')) return 'Notification (API)';
+      if (url.includes('API_MAINTENANCEORDER')) return 'Order (API)';
+      if (url.includes('API_MAINTPLAN')) return 'Maint. Plan (API)';
+      if (url.includes('PM_S4_ANALYTICS_SRV') || url.includes('API_ANALYTICS')) return 'S/4 Analytics';
+      
+      if (url.includes('PM_EQUIPMENT_SRV')) return 'Equipamento (EQUI)';
+      if (url.includes('PM_FUNCLOC_SRV')) return 'Local de Instalação (IFLOT)';
+      if (url.includes('PM_NOTIFICATION_SRV')) return 'Nota de Manutenção (QMEL)';
+      if (url.includes('PM_ORDER_SRV')) return 'Ordem de Manutenção (AUFK)';
+      if (url.includes('PM_MAINTPLAN_SRV')) return 'Plano de Manutenção (MMPT)';
+      if (url.includes('PM_MEASPOINT_SRV')) return 'Ponto de Medição (IMPTT)';
+      if (url.includes('PM_MATERIAL_SRV')) return 'Materiais (MARA/RESB/MSEG)';
+      if (url.includes('PM_ANALYTICS_SRV')) return 'Analytics / KPIs';
+      
+      return 'Serviço SAP OData';
+    };
+
+    // --- Fetch KPIs ---
+    const fetchKPIs = async () => {
+      try {
+        if (currentMode === 'ecc') {
+          // Total EQUI
+          fetch('/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet?$count=true')
+            .then(r => r.json())
+            .then(data => {
+               document.getElementById('kpi-val-1').textContent = data.d?.__count || data.d?.results?.length || 0;
+            }).catch(console.error);
+
+          // Notas Abertas
+          fetch('/sap/opu/odata/sap/PM_NOTIFICATION_SRV/QMELSet?$filter=QMST eq \'ABER\'')
+            .then(r => r.json())
+            .then(data => {
+               document.getElementById('kpi-val-2').textContent = data.d?.results?.length || 0;
+            }).catch(console.error);
+
+          // Ordens Execução
+          fetch('/sap/opu/odata/sap/PM_ORDER_SRV/AUFKSet?$filter=AUFST eq \'REL\'')
+            .then(r => r.json())
+            .then(data => {
+               document.getElementById('kpi-val-3').textContent = data.d?.results?.length || 0;
+            }).catch(console.error);
+
+          // Planos Preventivos
+          fetch('/sap/opu/odata/sap/PM_MAINTPLAN_SRV/MMPTSet?$count=true')
+            .then(r => r.json())
+            .then(data => {
+               document.getElementById('kpi-val-4').textContent = data.d?.__count || data.d?.results?.length || 0;
+            }).catch(console.error);
+            
+        } else {
+          // S/4HANA Mode
+          // Total Equipment
+          fetch('/sap/opu/odata/sap/API_EQUIPMENT/EquipmentCollection?$count=true')
+            .then(r => r.json())
+            .then(data => {
+               document.getElementById('kpi-val-1').textContent = data.d?.__count || 0;
+            }).catch(() => document.getElementById('kpi-val-1').textContent = 0);
+
+          // Open Notifications 
+          fetch('/sap/opu/odata/sap/API_MAINTNOTIFICATION/MaintenanceNotificationCollection?$filter=NotifProcessingPhase eq \'1\'&$count=true')
+            .then(r => r.json())
+            .then(data => {
+               let val = data.d?.__count;
+               if (val === undefined && data.d?.results) val = data.d.results.length;
+               document.getElementById('kpi-val-2').textContent = val || 0;
+            }).catch(() => document.getElementById('kpi-val-2').textContent = 0);
+
+          // Released Orders
+          fetch('/sap/opu/odata/sap/API_MAINTENANCEORDER/MaintenanceOrderCollection?$filter=MaintOrdProcessingPhase eq \'2\'&$count=true')
+            .then(r => r.json())
+            .then(data => {
+               let val = data.d?.__count;
+               if (val === undefined && data.d?.results) val = data.d.results.length;
+               document.getElementById('kpi-val-3').textContent = val || 0;
+            }).catch(() => document.getElementById('kpi-val-3').textContent = 0);
+
+          // Active Plans
+          fetch('/sap/opu/odata/sap/API_MAINTPLAN/MaintenancePlanCollection?$filter=MaintPlanIsActive eq \'true\'&$count=true')
+            .then(r => r.json())
+            .then(data => {
+               let val = data.d?.__count;
+               if (val === undefined && data.d?.results) val = data.d.results.length;
+               document.getElementById('kpi-val-4').textContent = val || 0;
+            }).catch(() => document.getElementById('kpi-val-4').textContent = 0);
+        }
+      } catch (err) {
+        console.error('Error fetching KPIs', err);
+      }
+    };
+    
+    // --- Fetch S4 Exclusive Analytics ---
+    const fetchS4Analytics = async () => {
+      try {
+        // Gauge: Compliance Rate
+        fetch('/sap/opu/odata/sap/PM_S4_ANALYTICS_SRV/MaintenancePlanCompliance')
+          .then(r => r.json())
+          .then(data => {
+             let rateStr = data.d?.complianceRate || '0.0%';
+             let rateVal = parseFloat(rateStr.replace('%', ''));
+             document.getElementById('compliance-text').textContent = rateStr;
+             // calculate rotation: -135deg to +45deg (range 180deg)
+             // rate 0% => -135deg, 100% => +45deg
+             let rotation = -135 + (rateVal / 100) * 180;
+             document.getElementById('compliance-gauge').style.transform = `rotate(${rotation}deg)`;
+          }).catch(console.error);
+
+        // Bar Chart: Notifications by Phase
+        fetch('/sap/opu/odata/sap/PM_S4_ANALYTICS_SRV/NotificationsByPhase')
+          .then(r => r.json())
+          .then(data => {
+             const results = data.d?.results || [];
+             const container = document.getElementById('phase-chart-container');
+             container.innerHTML = '';
+             let maxCount = Math.max(...results.map(r => parseInt(r.count, 10) || 0), 1);
+             
+             // Guarantee order or specific phases
+             const phasesExpected = [
+               { key: 'Outstanding', cls: 'bar-fill-Outstanding', label: 'Outstanding' },
+               { key: 'In Process', cls: 'bar-fill-In-Process', label: 'In Process' },
+               { key: 'Completed', cls: 'bar-fill-Completed', label: 'Completed' },
+               { key: 'Postponed', cls: 'bar-fill-Postponed', label: 'Postponed' }
+             ];
+             
+             // Reformat results as a map for quick lookup
+             const phaseMap = {};
+             results.forEach(r => phaseMap[r.phaseDesc] = parseInt(r.count,10)||0);
+
+             phasesExpected.forEach(p => {
+               let count = phaseMap[p.key] || 0;
+               let pct = (count / maxCount) * 100;
+               let div = document.createElement('div');
+               div.className = 'bar-item';
+               div.innerHTML = `
+                 <div class="bar-label">${p.label}</div>
+                 <div class="bar-track">
+                   <div class="bar-fill-inner ${p.cls}" style="width: 0%"></div>
+                 </div>
+                 <div class="bar-count">${count}</div>
+               `;
+               container.appendChild(div);
+               // Animate
+               setTimeout(() => {
+                 div.querySelector('.bar-fill-inner').style.width = `${pct}%`;
+               }, 50);
+             });
+          }).catch(console.error);
+
+      } catch (err) {
+        console.error('Error fetching S4 Analytics', err);
+      }
+    };
+
+    // --- Fetch Logs ---
+    const fetchLogs = async () => {
+      try {
+        const res = await fetch('/api/logs');
+        let logs = await res.json();
+        
+        // Filter by mode
+        if (currentMode === 's4') {
+          logs = logs.filter(l => l.url.includes('API_') || l.url.includes('PM_S4_')).slice(0, 10);
+        } else {
+          // ECC mode show top 10 general logs, excluding new abstract API calls if we want to be strict, but keeping it simple
+          logs = logs.filter(l => !l.url.includes('API_') && !l.url.includes('PM_S4_')).slice(0, 10);
+        }
+        
+        const tbody = document.getElementById('log-body');
+        tbody.innerHTML = '';
+        
+        if (logs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6b7280;">Nenhum request registrado ainda para este modo.</td></tr>';
+          return;
+        }
+
+        logs.forEach(log => {
+          const tr = document.createElement('tr');
+          
+          let statusClass = 'status-200';
+          if (log.status >= 400 && log.status < 500) statusClass = 'status-400';
+          if (log.status >= 500) statusClass = 'status-500';
+
+          tr.innerHTML = `
+            <td class="time-cell">${formatTime(log.timestamp)}</td>
+            <td><span class="badge ${log.method}">${log.method}</span></td>
+            <td><span class="endpoint-cell">${log.url.split('?')[0]}</span></td>
+            <td class="term-cell">${mapTerminology(log.url)}</td>
+            <td class="status-cell ${statusClass}">${log.status}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error('Error fetching logs', err);
+      }
+    };
+
+    // --- Quick Actions ---
+    const triggerAction = async (action) => {
+      try {
+        let url, method, body, successMsg;
+        
+        if (currentMode === 'ecc') {
+          if (action === 'nota') {
+            url = '/sap/opu/odata/sap/PM_NOTIFICATION_SRV/QMELSet';
+            method = 'POST';
+            body = { EQUNR: '10000000', QMART: 'M2', QMTXT: 'Nota gerada pelo Dashboard AxionGO', PRIOK: '2' };
+            successMsg = 'Nota de Manutenção criada com sucesso!';
+          } else if (action === 'ordem') {
+            url = '/sap/opu/odata/sap/PM_ORDER_SRV/AUFKSet';
+            method = 'POST';
+            body = { EQUNR: '10000000', AUART: 'PM01', KTEXT: 'Ordem Corretiva - Dashboard', PRIOK: '1' };
+            successMsg = 'Ordem Corretiva aberta com sucesso!';
+          } else if (action === 'criticos') {
+            url = '/sap/opu/odata/sap/PM_ANALYTICS_SRV/CriticalEquipment';
+            method = 'GET';
+            body = null;
+            successMsg = 'Consulta de Equipamentos Críticos realizada!';
+          }
+        } else {
+          // S/4HANA actions map
+          if (action === 'nota') {
+            url = '/sap/opu/odata/sap/API_MAINTNOTIFICATION/MaintenanceNotificationCollection';
+            method = 'POST';
+            body = { Equipment: '10000000', NotificationType: 'M2', NotificationText: 'S/4HANA Notification from Dashboard', Priority: '2' };
+            successMsg = 'Notification successfully created!';
+          } else if (action === 'ordem') {
+            url = '/sap/opu/odata/sap/API_MAINTENANCEORDER/MaintenanceOrderCollection';
+            method = 'POST';
+            body = { Equipment: '10000000', MaintenanceOrderType: 'YA01', MaintenanceOrderDesc: 'S/4HANA Order - Dashboard', Priority: '1' };
+            successMsg = 'Maintenance Order successfully generated!';
+          } else if (action === 'criticos') {
+            url = '/sap/opu/odata/sap/PM_S4_ANALYTICS_SRV/CriticalEquipment';
+            method = 'GET';
+            body = null;
+            successMsg = 'Critical Equipment fetched!';
+          }
+        }
+
+        const options = {
+          method,
+          headers: method !== 'GET' ? { 'Content-Type': 'application/json' } : undefined,
+          body: body ? JSON.stringify(body) : undefined
+        };
+
+        const res = await fetch(url, options);
+        if (res.ok) {
+          showToast(successMsg);
+          // Refresh KPIs and immediately fetch logs
+          fetchKPIs();
+          fetchLogs();
+          if (currentMode === 's4') fetchS4Analytics();
+        } else {
+          showToast('Erro ao executar a ação (Status HTTP: ' + res.status + ')', true);
+          fetchLogs();
+        }
+      } catch (err) {
+        showToast('Erro: Falha na requisição.', true);
+      }
+    };
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchKPIs();
+      fetchLogs();
+      
+      // Auto-refresh logs every 5 seconds
+      setInterval(fetchLogs, 5000);
+      
+      // Auto-refresh KPIs every 30 seconds
+      setInterval(() => {
+        fetchKPIs();
+        if (currentMode === 's4') fetchS4Analytics();
+      }, 30000); // Set to 30s as per requested
+    });
+  </script>
+</body>
+</html>

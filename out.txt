@@ -1,0 +1,119 @@
+  console.log
+    [DB] All 11 SAP PM tables created successfully:
+
+      at log (src/database/index.js:58:13)
+
+  console.log
+    [DB]   IFLOT, MARA, EQUI, QMEL, AUFK, AFKO, RESB, MSEG, MMPT, PLPO, IMPTT
+
+      at log (src/database/index.js:59:13)
+
+  console.log
+    [DB] Database path: ./database.db
+
+      at log (src/database/index.js:60:13)
+
+FAIL src/tests/mara.test.js
+  MARASet CRUD
+    × GET list returns 200 with d.results array (1 ms)
+    × POST valid material returns 201 with auto-generated MATNR
+    × GET single material returns 200 with d object
+    × POST with invalid MEINS returns 400
+    × DELETE clean material returns 204 (1 ms)
+    × DELETE material with references returns 400
+
+  ● MARASet CRUD › GET list returns 200 with d.results array
+
+    SqliteError: table RESB has no column named RSPOS
+
+    [0m [90m 31 |[39m   
+     [90m 32 |[39m   [90m// Add reference in RESB for in-use MATNR[39m
+    [31m[1m>[22m[39m[90m 33 |[39m   db[33m.[39mprepare([32m`INSERT INTO RESB (RSNUM, RSPOS, MATNR, BDMNG, MEINS, WERKS) VALUES ('RS-TEST', '0001', ?, 1, 'EA', '1000')`[39m)[33m.[39mrun(inUseMatnr)[33m;[39m
+     [90m    |[39m      [31m[1m^[22m[39m
+     [90m 34 |[39m
+     [90m 35 |[39m   db[33m.[39mpragma([32m'foreign_keys = ON'[39m)[33m;[39m
+     [90m 36 |[39m })[33m;[39m[0m
+
+      at Database.prepare (node_modules/better-sqlite3/lib/methods/wrappers.js:5:21)
+      at Object.prepare (src/tests/mara.test.js:33:6)
+
+  ● MARASet CRUD › POST valid material returns 201 with auto-generated MATNR
+
+    SqliteError: table RESB has no column named RSPOS
+
+    [0m [90m 31 |[39m   
+     [90m 32 |[39m   [90m// Add reference in RESB for in-use MATNR[39m
+    [31m[1m>[22m[39m[90m 33 |[39m   db[33m.[39mprepare([32m`INSERT INTO RESB (RSNUM, RSPOS, MATNR, BDMNG, MEINS, WERKS) VALUES ('RS-TEST', '0001', ?, 1, 'EA', '1000')`[39m)[33m.[39mrun(inUseMatnr)[33m;[39m
+     [90m    |[39m      [31m[1m^[22m[39m
+     [90m 34 |[39m
+     [90m 35 |[39m   db[33m.[39mpragma([32m'foreign_keys = ON'[39m)[33m;[39m
+     [90m 36 |[39m })[33m;[39m[0m
+
+      at Database.prepare (node_modules/better-sqlite3/lib/methods/wrappers.js:5:21)
+      at Object.prepare (src/tests/mara.test.js:33:6)
+
+  ● MARASet CRUD › GET single material returns 200 with d object
+
+    SqliteError: table RESB has no column named RSPOS
+
+    [0m [90m 31 |[39m   
+     [90m 32 |[39m   [90m// Add reference in RESB for in-use MATNR[39m
+    [31m[1m>[22m[39m[90m 33 |[39m   db[33m.[39mprepare([32m`INSERT INTO RESB (RSNUM, RSPOS, MATNR, BDMNG, MEINS, WERKS) VALUES ('RS-TEST', '0001', ?, 1, 'EA', '1000')`[39m)[33m.[39mrun(inUseMatnr)[33m;[39m
+     [90m    |[39m      [31m[1m^[22m[39m
+     [90m 34 |[39m
+     [90m 35 |[39m   db[33m.[39mpragma([32m'foreign_keys = ON'[39m)[33m;[39m
+     [90m 36 |[39m })[33m;[39m[0m
+
+      at Database.prepare (node_modules/better-sqlite3/lib/methods/wrappers.js:5:21)
+      at Object.prepare (src/tests/mara.test.js:33:6)
+
+  ● MARASet CRUD › POST with invalid MEINS returns 400
+
+    SqliteError: table RESB has no column named RSPOS
+
+    [0m [90m 31 |[39m   
+     [90m 32 |[39m   [90m// Add reference in RESB for in-use MATNR[39m
+    [31m[1m>[22m[39m[90m 33 |[39m   db[33m.[39mprepare([32m`INSERT INTO RESB (RSNUM, RSPOS, MATNR, BDMNG, MEINS, WERKS) VALUES ('RS-TEST', '0001', ?, 1, 'EA', '1000')`[39m)[33m.[39mrun(inUseMatnr)[33m;[39m
+     [90m    |[39m      [31m[1m^[22m[39m
+     [90m 34 |[39m
+     [90m 35 |[39m   db[33m.[39mpragma([32m'foreign_keys = ON'[39m)[33m;[39m
+     [90m 36 |[39m })[33m;[39m[0m
+
+      at Database.prepare (node_modules/better-sqlite3/lib/methods/wrappers.js:5:21)
+      at Object.prepare (src/tests/mara.test.js:33:6)
+
+  ● MARASet CRUD › DELETE clean material returns 204
+
+    SqliteError: table RESB has no column named RSPOS
+
+    [0m [90m 31 |[39m   
+     [90m 32 |[39m   [90m// Add reference in RESB for in-use MATNR[39m
+    [31m[1m>[22m[39m[90m 33 |[39m   db[33m.[39mprepare([32m`INSERT INTO RESB (RSNUM, RSPOS, MATNR, BDMNG, MEINS, WERKS) VALUES ('RS-TEST', '0001', ?, 1, 'EA', '1000')`[39m)[33m.[39mrun(inUseMatnr)[33m;[39m
+     [90m    |[39m      [31m[1m^[22m[39m
+     [90m 34 |[39m
+     [90m 35 |[39m   db[33m.[39mpragma([32m'foreign_keys = ON'[39m)[33m;[39m
+     [90m 36 |[39m })[33m;[39m[0m
+
+      at Database.prepare (node_modules/better-sqlite3/lib/methods/wrappers.js:5:21)
+      at Object.prepare (src/tests/mara.test.js:33:6)
+
+  ● MARASet CRUD › DELETE material with references returns 400
+
+    SqliteError: table RESB has no column named RSPOS
+
+    [0m [90m 31 |[39m   
+     [90m 32 |[39m   [90m// Add reference in RESB for in-use MATNR[39m
+    [31m[1m>[22m[39m[90m 33 |[39m   db[33m.[39mprepare([32m`INSERT INTO RESB (RSNUM, RSPOS, MATNR, BDMNG, MEINS, WERKS) VALUES ('RS-TEST', '0001', ?, 1, 'EA', '1000')`[39m)[33m.[39mrun(inUseMatnr)[33m;[39m
+     [90m    |[39m      [31m[1m^[22m[39m
+     [90m 34 |[39m
+     [90m 35 |[39m   db[33m.[39mpragma([32m'foreign_keys = ON'[39m)[33m;[39m
+     [90m 36 |[39m })[33m;[39m[0m
+
+      at Database.prepare (node_modules/better-sqlite3/lib/methods/wrappers.js:5:21)
+      at Object.prepare (src/tests/mara.test.js:33:6)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 6 total
+Snapshots:   0 total
+Time:        1.097 s, estimated 2 s
+Ran all test suites matching /src\\tests\\mara.test.js/i.

@@ -1,0 +1,803 @@
+﻿  console.log
+    [S4-DB] All S/4HANA tables created: S4_EQUIPMENT, S4_FUNCTIONALLOCATION, S4_MAINTPLAN, S4_MAINTENANCENOTIFICATION, S4_MAINTENANCEORDER, S4_MAINTENANCEORDER_OPERATION, S4_MAINTPLAN_ITEM
+
+      at log (src/v4/database/index.js:32:13)
+
+  console.log
+    [DB] All 11 SAP PM tables created successfully:
+
+      at log (src/database/index.js:58:13)
+
+  console.log
+    [DB]   IFLOT, MARA, EQUI, QMEL, AUFK, AFKO, RESB, MSEG, MMPT, PLPO, IMPTT
+
+      at log (src/database/index.js:59:13)
+
+  console.log
+    [DB] Database path: ./database.db
+
+      at log (src/database/index.js:60:13)
+
+node.exe : FAIL src/v4/
+tests/maintNotification
+.test.js
+No linha:1 caractere:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (FAIL src/v4/t   
+ es...ication.test.    
+js:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+  S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints
+    CSRF Token Fetch
+      ├ù should fetch 
+a CSRF token (1 ms)
+    GET /MaintenanceNot
+ificationCollection
+      ├ù should return 
+a list of 
+notifications (1 ms)
+      ├ù should filter 
+notifications by 
+NotificationType
+    GET /MaintenanceNot
+ificationCollection('{i
+d}')
+      ├ù should return 
+a single notification
+      ├ù should return 
+404 for non-existent 
+notification
+    POST /MaintenanceNo
+tificationCollection
+      ├ù should fail 
+with missing required 
+fields
+      ├ù should fail 
+with invalid equipment 
+FK
+      ├ù should create 
+a notification with 
+valid payload
+    PATCH /MaintenanceN
+otificationCollection('
+{id}')
+      ├ù should update 
+a notification
+    Function Imports 
+(State Transitions)
+      ├ù should set an 
+outstanding 
+notification to In 
+Process
+      ├ù should fail 
+to set an in-process 
+notification to In 
+Process again
+      ├ù should fail 
+to complete an 
+outstanding 
+notification
+      ├ù should 
+complete an in-process 
+notification
+      ├ù should 
+postpone an 
+outstanding 
+notification
+      ├ù should fail 
+to postpone a 
+completed notification
+    Navigation: 
+to_MaintenanceOrder
+      ├ù should return 
+orders linked to 
+notification (1 ms)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ CSRF 
+Token Fetch ÔÇ║ should 
+fetch a CSRF token
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ GET /Main
+tenanceNotificationColl
+ection ÔÇ║ should 
+return a list of 
+notifications
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ GET /Main
+tenanceNotificationColl
+ection ÔÇ║ should 
+filter notifications 
+by NotificationType
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ GET /Main
+tenanceNotificationColl
+ection('{id}') ÔÇ║ 
+should return a single 
+notification
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ GET /Main
+tenanceNotificationColl
+ection('{id}') ÔÇ║ 
+should return 404 for 
+non-existent 
+notification
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ POST /Mai
+ntenanceNotificationCol
+lection ÔÇ║ should 
+fail with missing 
+required fields
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ POST /Mai
+ntenanceNotificationCol
+lection ÔÇ║ should 
+fail with invalid 
+equipment FK
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ POST /Mai
+ntenanceNotificationCol
+lection ÔÇ║ should 
+create a notification 
+with valid payload
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ PATCH /Ma
+intenanceNotificationCo
+llection('{id}') ÔÇ║ 
+should update a 
+notification
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should set an 
+outstanding 
+notification to In 
+Process
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should fail to set an 
+in-process 
+notification to In 
+Process again
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should fail to 
+complete an 
+outstanding 
+notification
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should complete an 
+in-process notification
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should postpone an 
+outstanding 
+notification
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ Function 
+Imports (State 
+Transitions) ÔÇ║ 
+should fail to 
+postpone a completed 
+notification
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+  ÔùÅ S/4HANA 
+API_MAINTNOTIFICATION 
+Endpoints ÔÇ║ 
+Navigation: 
+to_MaintenanceOrder 
+ÔÇ║ should return 
+orders linked to 
+notification
+
+    SqliteError: 
+FOREIGN KEY constraint 
+failed
+
+    [0m [90m 26 
+|[39m [32m      
+(MaintenanceOrder, Main
+tenanceNotification) 
+[39m
+     [90m 27 |[39m 
+[32m      VALUES 
+('ORD-TEST-001', 
+?)[39m
+    [31m[1m>[22m[39
+m[90m 28 |[39m [32m 
+   `[39m)[33m.[39mru
+n(newNotificationId)[3
+3m;[39m
+     [90m    |[39m   
+     
+[31m[1m^[22m[39m
+     [90m 29 |[39m
+     [90m 30 |[39m   
+  [90m// Insert dummy 
+notification for 
+standalone testing[39m
+     [90m 31 |[39m   
+  db[33m.[39mprepare(
+[32m`[39m[0m
+
+      at Object.run (sr
+c/v4/tests/maintNotific
+ation.test.js:28:8)
+
+Test Suites: 1 failed, 
+1 total
+Tests:       16 
+failed, 16 total
+Snapshots:   0 total
+Time:        1.208 s, 
+estimated 2 s
+Ran all test suites 
+matching /src\\v4\\test
+s\\maintNotification.te
+st.js/i.
+

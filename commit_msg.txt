@@ -1,0 +1,12 @@
+feat: add SAP S/4HANA layer
+
+  - src/v4/ complete S/4HANA implementation
+  - 5 API services: API_EQUIPMENT, API_FUNCTIONALLOCATION,
+    API_MAINTNOTIFICATION, API_MAINTENANCEORDER, API_MAINTPLAN
+  - PM_S4_ANALYTICS_SRV with 8 analytical endpoints
+  - CSRF middleware for all write operations
+  - database-s4.db with 280 seed records
+  - Dashboard toggle ECC/S4HANA with compliance gauge
+  - Swagger unified: ECC + S/4HANA tags
+  - 14 test suites, 126 tests passing
+  - DOCUMENTATION.md and README.md updated
