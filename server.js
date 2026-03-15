@@ -40,8 +40,36 @@ const combinedSwaggerSpec = {
 
 app.get('/api-docs.json', (req, res) => res.json(combinedSwaggerSpec));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(combinedSwaggerSpec, {
-  customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: 'SAP PM Emulator — API Docs',
+  customCss: `
+    .swagger-ui .topbar { background: #0f1520 !important; position: relative; }
+    .swagger-ui .topbar-wrapper img { display: none; }
+    .swagger-ui .topbar-wrapper::before {
+      content: 'AxiomGO · SAP PM API';
+      color: #00d97e;
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+    }
+    .dashboard-link {
+      position: fixed;
+      top: 8px;
+      right: 16px;
+      z-index: 9999;
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #00d97e;
+      color: #00d97e !important;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      text-decoration: none;
+      border-radius: 2px;
+      letter-spacing: 0.08em;
+    }
+    .dashboard-link:hover { background: rgba(0, 217, 126, 0.1); }
+  `,
+  customJs: '/dashboard-link.js',
 }));
 
 // ─── API Routes (ECC) ──────────────────────────────────────────────────

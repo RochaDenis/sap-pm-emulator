@@ -1,960 +1,1094 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SAP PM Emulator - Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AxiomGO · SAP PM Control Room</title>
+  <meta name="description" content="AxiomGO AI — SAP PM Industrial Control Room Dashboard" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@300;400;500&family=Barlow+Condensed:wght@600&display=swap" rel="stylesheet" />
+
   <style>
-    /* Design Variables */
+    /* ─── CSS Variables ────────────────────────────────────────────── */
     :root {
-      --bg-dark: #0a0e1a;
-      --bg-panel: #111827;
-      --bg-panel-hover: #1f2937;
-      --border-color: #1f2937;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --accent-color: #3b82f6; /* Blue for ECC */
-      --card-gradient: linear-gradient(145deg, #111827 0%, #0f172a 100%);
-      
-      --badge-get: #3b82f6;
-      --badge-get-bg: rgba(59, 130, 246, 0.15);
-      --badge-post: #10b981;
-      --badge-post-bg: rgba(16, 185, 129, 0.15);
-      --badge-patch: #f59e0b;
-      --badge-patch-bg: rgba(245, 158, 11, 0.15);
-      --badge-delete: #ef4444;
-      --badge-delete-bg: rgba(239, 68, 68, 0.15);
+      --bg0: #0b0f1a;
+      --bg1: #0f1520;
+      --bg2: #141c2b;
+      --bg3: #1a2235;
+      --green: #00d97e;
+      --green-dim: #00613a;
+      --green-glow: rgba(0, 217, 126, 0.15);
+      --amber: #f5a623;
+      --red: #e84040;
+      --blue: #4b9eff;
+      --purple: #a78bfa;
+      --text0: #e8edf5;
+      --text1: #8a9ab5;
+      --text2: #3a4a65;
+      --border: #1e2d42;
     }
 
-    body.mode-s4 {
-      --accent-color: #00c853; /* Green for S/4HANA */
-      --badge-get: #00c853;
-      --badge-get-bg: rgba(0, 200, 83, 0.15);
-    }
+    /* ─── Base Reset ───────────────────────────────────────────────── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      padding: 0;
+      background: var(--bg0);
+      color: var(--text0);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Header */
-    header {
-      background: var(--bg-panel);
-      border-bottom: 1px solid var(--border-color);
-      padding: 1rem 2rem;
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .cond { font-family: 'IBM Plex Sans Condensed', sans-serif; }
+
+    /* ─── Pulse Animation ──────────────────────────────────────────── */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 var(--green-glow); }
+      50%       { opacity: 0.7; transform: scale(1.15); box-shadow: 0 0 0 4px transparent; }
+    }
+
+    /* ─── Header ───────────────────────────────────────────────────── */
+    #main-header {
+      background: var(--bg1);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      padding: 0 14px;
+      height: 48px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      flex-shrink: 0;
+      gap: 12px;
     }
-    
-    header h1 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    header h1::before {
+
+    #main-header::after {
       content: '';
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      background-color: var(--accent-color);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--accent-color);
-      transition: background-color 0.3s, box-shadow 0.3s;
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green), var(--green-glow), transparent);
+      opacity: 0.6;
     }
-    
+
+    .header-left {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text0);
+      letter-spacing: 0.04em;
+    }
+
+    .brand-name .go {
+      color: var(--green);
+    }
+
+    .brand-subtitle {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      color: var(--text2);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
     .header-right {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 14px;
     }
 
-    .mode-badge {
-      font-size: 0.875rem;
-      color: var(--accent-color);
-      font-weight: 600;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      background: var(--bg-panel-hover);
-      border: 1px solid var(--border-color);
-      transition: color 0.3s;
-    }
-
-    /* Toggle Switch */
-    .mode-toggle {
+    .plant-info {
       display: flex;
-      background: var(--bg-panel-hover);
-      border-radius: 9999px;
-      padding: 0.25rem;
-      border: 1px solid var(--border-color);
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
     }
-    
-    .toggle-btn {
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.875rem;
-      transition: all 0.2s;
+
+    .plant-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text2);
+      letter-spacing: 0.08em;
+    }
+
+    .live-indicator {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .toggle-btn.active.ecc {
-      background: #3b82f6;
-      color: #fff;
-    }
-    
-    .toggle-btn.active.s4 {
-      background: #00c853;
-      color: #fff;
+      gap: 5px;
     }
 
-    /* Main Container */
-    .container {
-      padding: 2rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      max-width: 1600px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    /* KPI Cards */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-    
-    .kpi-card {
-      background: var(--card-gradient);
-      border: 1px solid var(--border-color);
-      border-radius: 0.75rem;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    
-    .kpi-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-      border-color: #374151;
-    }
-    
-    .kpi-title {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .kpi-value {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    /* Additional S/4HANA Panels (Gauge + Chart) */
-    .s4-panels {
-      display: none;
-      grid-template-columns: 1fr 2fr;
-      gap: 2rem;
-    }
-
-    body.mode-s4 .s4-panels {
-      display: grid;
-    }
-
-    @media (max-width: 1024px) {
-      .s4-panels { grid-template-columns: 1fr; }
-    }
-
-    /* Compliance Gauge */
-    .gauge-wrapper {
-      position: relative;
-      width: 160px;
-      height: 80px;
-      overflow: hidden;
-      margin: 1.5rem auto 0;
-    }
-    
-    .gauge-bg {
-      position: absolute;
-      top: 0; left: 0;
-      width: 160px; height: 160px;
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      border: 16px solid #374151;
-      box-sizing: border-box;
-    }
-    
-    .gauge-fill {
-      position: absolute;
-      top: 0; left: 0;
-      width: 160px; height: 160px;
-      border-radius: 50%;
-      border: 16px solid var(--accent-color);
-      border-bottom-color: transparent !important;
-      border-right-color: transparent !important;
-      box-sizing: border-box;
-      transform: rotate(-135deg); /* 0% */
-      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .gauge-value {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1;
-    }
-
-    .gauge-label {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    /* Bar Chart for Phases */
-    .bar-chart {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-      margin-top: 1rem;
-      padding: 0 1rem;
-    }
-    
-    .bar-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    
-    .bar-label {
-      width: 130px;
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      text-align: right;
-    }
-    
-    .bar-track {
-      flex: 1;
-      height: 14px;
-      background: #374151;
-      border-radius: 9999px;
-      overflow: hidden;
-    }
-    
-    .bar-fill-inner {
-      height: 100%;
-      width: 0%;
-      border-radius: 9999px;
-      transition: width 1s ease-out;
-    }
-    
-    .bar-fill-Outstanding { background: #f97316; } /* orange */
-    .bar-fill-In-Process { background: #3b82f6; } /* blue */
-    .bar-fill-Completed { background: #22c55e; } /* green */
-    .bar-fill-Postponed { background: #9ca3af; } /* gray */
-    
-    .bar-count {
-      width: 40px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-align: right;
-    }
-
-    /* Main Grid: Activity Log + Quick Actions */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 2rem;
-      flex: 1;
-    }
-    
-    @media (max-width: 1024px) {
-      .main-grid { grid-template-columns: 1fr; }
-    }
-
-    /* Panels */
-    .panel {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    
-    .panel-header {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid var(--border-color);
-      font-weight: 600;
-      font-size: 1.1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .panel-header .indicator {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.75rem;
-      color: var(--accent-color);
-      transition: color 0.3s;
-    }
-    
-    .pulse {
-      width: 8px;
-      height: 8px;
-      background: var(--accent-color);
-      border-radius: 50%;
+      background: var(--green);
       animation: pulse 2s infinite;
-      transition: background 0.3s;
-    }
-    
-    /* Dynamic pulse glow for ECC vs S4 */
-    body.mode-ecc .pulse {
-      animation: pulse-ecc 2s infinite;
-    }
-    body.mode-s4 .pulse {
-      animation: pulse-s4 2s infinite;
-    }
-    
-    @keyframes pulse-ecc {
-      0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-      70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-    }
-    @keyframes pulse-s4 {
-      0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7); }
-      70% { box-shadow: 0 0 0 6px rgba(0, 200, 83, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
+      flex-shrink: 0;
     }
 
-    /* Activity Log Table */
-    .log-container {
-      flex: 1;
-      overflow-y: auto;
-      max-height: 500px;
-    }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-    
-    th {
-      background: #0f172a;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 1rem 1.5rem;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    
-    td {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border-color);
-      font-size: 0.875rem;
-    }
-    
-    tbody tr:hover {
-      background: var(--bg-panel-hover);
-    }
-    
-    .time-cell { color: var(--text-muted); font-variant-numeric: tabular-nums; }
-    .status-cell { font-weight: 600; }
-    .status-200, .status-201, .status-204 { color: var(--badge-post); }
-    .status-400, .status-404 { color: var(--badge-patch); }
-    .status-500 { color: var(--badge-delete); }
-    
-    .endpoint-cell {
-      font-family: monospace;
-      color: #93c5fd;
-      background: rgba(147, 197, 253, 0.1);
-      padding: 0.2rem 0.4rem;
-      border-radius: 0.25rem;
-    }
-    
-    .term-cell {
-      color: #e2e8f0;
-      font-weight: 500;
+    .live-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: 0.1em;
     }
 
-    /* Method Badges */
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.6rem;
-      border-radius: 9999px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
+    #clock {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--text0);
+      letter-spacing: 0.06em;
+      min-width: 60px;
+      text-align: right;
     }
-    .badge.GET { color: var(--badge-get); background: var(--badge-get-bg); }
-    .badge.POST { color: var(--badge-post); background: var(--badge-post-bg); }
-    .badge.PATCH, .badge.PUT { color: var(--badge-patch); background: var(--badge-patch-bg); }
-    .badge.DELETE { color: var(--badge-delete); background: var(--badge-delete-bg); }
 
-    /* Quick Actions */
-    .actions-list {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .action-btn {
-      background: var(--card-gradient);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 1rem 1.25rem;
-      border-radius: 0.5rem;
-      font-size: 0.95rem;
-      font-weight: 500;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
+    .header-controls {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 6px;
     }
-    
-    .action-btn:hover {
-      background: #1f2937;
-      border-color: #4b5563;
-      transform: translateX(4px);
+
+    /* ─── Toggle / Nav Buttons ─────────────────────────────────────── */
+    .toggle-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      padding: 4px 9px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text1);
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.15s ease;
     }
-    
-    .action-btn i {
+
+    .toggle-btn:hover {
+      border-color: var(--text1);
+      color: var(--text0);
+    }
+
+    .toggle-btn.active {
+      background: var(--bg3);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .nav-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      padding: 4px 9px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text1);
+      cursor: pointer;
+      border-radius: 2px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    /* ─── Tooltip System ───────────────────────────────────────────── */
+    .tip-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .tip-icon {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid var(--text2);
+      color: var(--text2);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-      font-style: normal;
-      font-size: 14px;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+      user-select: none;
     }
-    
-    .btn-create-nota i { background: var(--badge-post-bg); color: var(--badge-post); }
-    .btn-create-ordem i { background: var(--badge-get-bg); color: var(--badge-get); }
-    .btn-consultar i { background: var(--badge-patch-bg); color: var(--badge-patch); }
 
-    /* Toast Notification */
-    #toast-container {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
+    .tip-icon:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .tip-box {
+      display: none;
+      position: absolute;
+      left: 20px;
+      top: -4px;
+      background: var(--bg2);
+      border: 1px solid var(--green-dim);
+      border-radius: 4px;
+      padding: 8px 10px;
+      width: 220px;
+      z-index: 100;
+      font-size: 10px;
+      color: var(--text1);
+      line-height: 1.5;
+    }
+
+    .tip-box::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 8px;
+      width: 8px;
+      height: 8px;
+      background: var(--bg2);
+      border-left: 1px solid var(--green-dim);
+      border-bottom: 1px solid var(--green-dim);
+      transform: rotate(45deg);
+    }
+
+    .tip-wrap:hover .tip-box { display: block; }
+
+    /* ─── Panel Base ───────────────────────────────────────────────── */
+    .panel {
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 2px;
+      transition: border-color 0.2s;
+    }
+    .panel:hover { border-color: #2a3a55; }
+
+    .panel-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text2);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      height: 100%;
+      min-height: inherit;
+      border: 1px dashed var(--border);
+      border-radius: 2px;
+    }
+
+    /* ─── KPI Row ──────────────────────────────────────────────────── */
+    #kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 8px;
+    }
+
+    .kpi { background: var(--bg1); border: 1px solid var(--border); padding: 11px 13px; position: relative; overflow: hidden; border-radius: 2px; }
+    .kpi-lbl { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
+    .kpi-lbl-txt { font-size: 8px; color: var(--text2); letter-spacing: 0.12em; text-transform: uppercase; }
+    .kpi-num { font-family: 'IBM Plex Sans Condensed', sans-serif; font-size: 30px; font-weight: 500; line-height: 1; color: var(--text0); }
+    .kpi-num.blue   { color: var(--blue); }
+    .kpi-num.amber  { color: var(--amber); }
+    .kpi-num.green  { color: var(--green); }
+    .kpi-num.purple { color: var(--purple); }
+    .kpi-meta { font-size: 8px; color: var(--text2); margin-top: 4px; }
+
+    /* ─── Equipment Panel ──────────────────────────────────────────── */
+    .pnl-hdr  { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .pnl-title { font-size: 8px; color: var(--text2); letter-spacing: 0.15em; text-transform: uppercase; flex: 1; }
+    .pnl-tag   { font-size: 8px; color: var(--blue); letter-spacing: 0.08em; border: 1px solid var(--border); padding: 2px 6px; border-radius: 2px; }
+    .pnl-body  { display: flex; flex-direction: column; gap: 10px; }
+
+    .eq-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 4px;
+    }
+    .eq-grid.wide {
+      grid-template-columns: repeat(16, 1fr);
+    }
+    .eq-dot {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 2px;
+      cursor: default;
+      transition: transform 0.1s;
+    }
+    .eq-dot:hover { transform: scale(1.3); }
+    .eq-dot.op     { background: var(--green); box-shadow: 0 0 4px rgba(0,217,126,0.4); }
+    .eq-dot.eq-ok  { background: var(--green); box-shadow: 0 0 4px rgba(0,217,126,0.4); }
+    .eq-dot.al     { background: var(--amber); box-shadow: 0 0 4px rgba(245,166,35,0.4); }
+    .eq-dot.cr     { background: var(--red);   box-shadow: 0 0 4px rgba(232,64,64,0.4); }
+    .eq-dot.st     { background: var(--bg3); }
+
+    .eq-legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .eq-leg-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      color: var(--text2);
+      letter-spacing: 0.06em;
+    }
+    .eq-leg-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 1px;
+      flex-shrink: 0;
+    }
+    .eq-leg-dot.op { background: var(--green); }
+    .eq-leg-dot.al { background: var(--amber); }
+    .eq-leg-dot.cr { background: var(--red); }
+    .eq-leg-dot.st { background: var(--bg3); border: 1px solid var(--border); }
+
+    /* ─── Bar Items (Notifications by Phase) ───────────────────────── */
+    .bar-item { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+    .bar-lbl { font-size:8px; color:var(--text2); width:68px; text-align:right; flex-shrink:0; text-transform:uppercase; }
+    .bar-track { flex:1; height:10px; background:var(--bg3); overflow:hidden; }
+    .bar-fill { height:0%; transition:width 0.8s ease; }
+    #bar-outstanding { transition-delay: 0s; }
+    #bar-inprocess   { transition-delay: 0.1s; }
+    #bar-completed   { transition-delay: 0.2s; }
+    #bar-postponed   { transition-delay: 0.3s; }
+    .bar-num { font-size:9px; color:var(--text1); width:16px; text-align:right; flex-shrink:0; }
+
+    /* ─── Compliance Section ───────────────────────────────────────── */
+    .comp-wrap { display:flex; align-items:center; gap:12px; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+    .comp-lbl { font-size:8px; color:var(--text2); letter-spacing:0.1em; text-transform:uppercase; }
+    .comp-num { font-family:'IBM Plex Sans Condensed'; font-size:26px; font-weight:500; color:var(--green); }
+    .comp-detail { font-size:8px; color:var(--text2); margin-top:2px; line-height:1.5; }
+    .comp-warn { font-size:8px; color:var(--amber); margin-top:3px; }
+    .comp-label-row { display:flex; align-items:center; gap:5px; }
+
+    /* ─── Agent Thread ─────────────────────────────────────────────── */
+    .thread-item { display:grid; grid-template-columns:28px 1fr; gap:0; position:relative; }
+    .thread-item::before { content:''; position:absolute; left:13px; top:32px; bottom:0; width:1px; background:var(--border); }
+    .thread-item:last-child::before { display:none; }
+    .thread-avatar { width:28px; height:28px; border-radius:2px; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono'; font-size:9px; font-weight:500; flex-shrink:0; margin-top:8px; }
+    .av-ax { background:#0a1a3a; color:var(--blue); border:1px solid #1a3a6a; }
+    .av-kl { background:#1a1200; color:var(--amber); border:1px solid #3a2800; }
+    .av-di { background:#1a0f2a; color:var(--purple); border:1px solid #3a1a6a; }
+    .av-nw { background:#001a0e; color:var(--green); border:1px solid var(--green-dim); }
+    .thread-content { padding:8px 10px 12px 10px; }
+    /* Left border accent per agent */
+    .thread-item:has(.av-ax) .thread-content { border-left: 2px solid var(--blue); }
+    .thread-item:has(.av-kl) .thread-content { border-left: 2px solid var(--amber); }
+    .thread-item:has(.av-di) .thread-content { border-left: 2px solid var(--purple); }
+    .thread-item:has(.av-nw) .thread-content { border-left: 2px solid var(--green); }
+    .thread-meta { display:flex; align-items:center; gap:6px; margin-bottom:3px; }
+    .thread-who { font-family:'IBM Plex Mono'; font-size:10px; font-weight:500; color:var(--text0); }
+    .thread-role { font-family:'IBM Plex Mono'; font-size:8px; color:var(--text2); }
+    .thread-time { font-family:'IBM Plex Mono'; font-size:8px; color:var(--text2); margin-left:auto; }
+    .thread-msg { font-size:11px; color:var(--text1); font-weight:300; line-height:1.4; margin-bottom:4px; }
+    .thread-sap { font-family:'IBM Plex Mono'; font-size:9px; background:var(--bg2); border:1px solid var(--border); padding:4px 6px; margin-top:3px; display:flex; align-items:center; gap:6px; }
+    .sap-post { color:var(--green); font-weight:500; }
+    .sap-get { color:var(--blue); font-weight:500; }
+    .sap-patch { color:var(--amber); font-weight:500; }
+    .thread-result { font-family:'IBM Plex Mono'; font-size:8px; margin-top:3px; color:var(--green); display:flex; align-items:center; gap:5px; }
+    .res-tag { background:rgba(0,217,126,0.08); border:1px solid var(--green-dim); padding:1px 5px; font-size:8px; }
+    .st-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+    .st-run { background:var(--green); animation:pulse 1s infinite; }
+    .st-done { background:var(--text2); }
+    @keyframes fadein { from{opacity:0;transform:translateY(-4px);} to{opacity:1;transform:translateY(0);} }
+    .thread-new { animation:fadein 0.4s ease; }
+    /* Scrollbar for thread panel */
+    #thread-list::-webkit-scrollbar { width: 3px; }
+    #thread-list::-webkit-scrollbar-track { background: var(--bg0); }
+    #thread-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ─── SAP Log ──────────────────────────────────────────────────── */
+    .log-row { display:grid; grid-template-columns:50px 36px 1fr 26px; gap:4px; padding:4px 0; border-bottom:1px solid var(--bg3); align-items:center; }
+    .log-row:last-child { border-bottom:none; }
+    .log-t { font-family:'IBM Plex Mono'; font-size:8px; color:var(--text2); }
+    .log-m { font-family:'IBM Plex Mono'; font-size:8px; font-weight:500; }
+    .log-post { color:var(--green); }
+    .log-get { color:var(--blue); }
+    .log-patch { color:var(--amber); }
+    .log-ep { font-family:'IBM Plex Mono'; font-size:8px; color:var(--text2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .log-ep em { color:var(--text1); font-style:normal; }
+    .log-s { font-family:'IBM Plex Mono'; font-size:8px; text-align:right; }
+    .log-200 { color:var(--blue); }
+    .log-201 { color:var(--green); }
+    .log-new { animation:fadein 0.3s ease; }
+
+    /* ─── Main 3-Column Body ───────────────────────────────────────── */
+    #main-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 320px;
+      gap: 6px;
+      padding: 0 8px 8px;
+      flex: 1;
+    }
+
+    #col-left {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      z-index: 50;
+      gap: 6px;
     }
-    
-    .toast {
-      background: #1f2937;
-      border-left: 4px solid var(--accent-color);
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 0.25rem;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
-      animation: slideIn 0.3s ease-out forwards;
-      opacity: 0;
-      transform: translateX(100%);
+
+    #col-right {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
-    
-    @keyframes slideIn {
-      to { opacity: 1; transform: translateX(0); }
+
+    /* ─── Footer ───────────────────────────────────────────────────── */
+    #main-footer {
+      background: var(--bg1);
+      border-top: 1px solid var(--border);
+      padding: 5px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    
-    @keyframes fadeOut {
-      to { opacity: 0; }
+
+    .footer-stats {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      color: var(--text2);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .footer-dot.green  { background: var(--green); }
+    .footer-dot.blue   { background: var(--blue); }
+    .footer-dot.purple { background: var(--purple); }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
   </style>
 </head>
-<body class="mode-ecc">
 
-  <header>
-    <h1>SAP PM Emulator</h1>
-    <div class="header-right">
-      <span class="mode-badge" id="mode-badge-text">SAP ECC Emulator</span>
-      <div class="mode-toggle">
-        <button class="toggle-btn active ecc" onclick="setMode('ecc')" id="mode-ecc-btn">
-          🔵 SAP ECC
-        </button>
-        <button class="toggle-btn s4" onclick="setMode('s4')" id="mode-s4-btn">
-          🟢 S/4HANA
-        </button>
+<body>
+
+  <!-- ─── HEADER ─────────────────────────────────────────────────────── -->
+  <header id="main-header">
+
+    <!-- Left: Brand -->
+    <div class="header-left">
+      <div class="brand-block">
+        <div class="brand-name">Axiom<span class="go">GO</span></div>
+        <div class="brand-subtitle">AI · SAP PM Control Room</div>
       </div>
+    </div>
+
+    <!-- Right: Plant info, clock, controls -->
+    <div class="header-right">
+
+      <div class="plant-info">
+        <div class="plant-name">COMPLEXO PETROQUÍMICO — SP-01</div>
+        <div class="live-indicator">
+          <div class="pulse-dot"></div>
+          <span class="live-text">PLANT ONLINE</span>
+        </div>
+      </div>
+
+      <div id="clock" class="mono">00:00:00</div>
+
+      <div class="header-controls">
+        <button id="btn-ecc"   class="toggle-btn"        data-mode="ecc">ECC</button>
+        <button id="btn-s4"    class="toggle-btn active"  data-mode="s4">S4HANA</button>
+        <a href="/api-docs" class="nav-btn" id="btn-api-docs">📖 API Docs</a>
+      </div>
+
     </div>
   </header>
 
-  <div class="container">
-    <!-- KPI Row -->
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-title" id="kpi-title-1">Total Equipamentos</div>
-        <div class="kpi-value" id="kpi-val-1">-</div>
+  <!-- ─── KPI ROW ────────────────────────────────────────────────────── -->
+  <div id="kpi-row">
+
+    <!-- KPI 1: Equipamentos -->
+    <div class="kpi kpi-blue">
+      <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blue);"></div>
+      <div class="kpi-lbl">
+        <span class="kpi-lbl-txt mono" id="kpi-lbl-equip">EQUIPAMENTOS</span>
+        <div class="tip-wrap">
+          <div class="tip-icon">?</div>
+          <div class="tip-box">Cada ativo físico da planta — bombas, motores, vasos de pressão — cadastrado no SAP PM com histórico completo. Dados via API_EQUIPMENT / EQUISet.</div>
+        </div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title" id="kpi-title-2">Notas Abertas</div>
-        <div class="kpi-value" id="kpi-val-2">-</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title" id="kpi-title-3">Ordens em Execução</div>
-        <div class="kpi-value" id="kpi-val-3">-</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title" id="kpi-title-4">Planos Preventivos</div>
-        <div class="kpi-value" id="kpi-val-4">-</div>
-      </div>
+      <div class="kpi-num blue" id="kpi-equip">--</div>
+      <div class="kpi-meta mono" id="kpi-equip-meta"></div>
     </div>
 
-    <!-- S/4HANA Exclusive Panels (Compliance Gauge & Phase Chart) -->
-    <div class="s4-panels" id="s4-exclusive-panels">
-      <div class="panel">
-        <div class="panel-header">Preventive Compliance</div>
-        <div class="gauge-wrapper">
-          <div class="gauge-bg"></div>
-          <div class="gauge-fill" id="compliance-gauge"></div>
-          <div class="gauge-value" id="compliance-text">0%</div>
-        </div>
-        <div class="gauge-label">Compliance Rate</div>
-      </div>
-      <div class="panel">
-        <div class="panel-header">Notifications by Phase</div>
-        <div class="bar-chart" id="phase-chart-container">
-          <!-- Phase bars will be injected here -->
+    <!-- KPI 2: Notas Abertas -->
+    <div class="kpi kpi-amber">
+      <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);"></div>
+      <div class="kpi-lbl">
+        <span class="kpi-lbl-txt mono" id="kpi-lbl-notif">NOTAS ABERTAS</span>
+        <div class="tip-wrap">
+          <div class="tip-icon">?</div>
+          <div class="tip-box">Solicitações de manutenção criadas pelo agente KARL no SAP. Uma nota é o registro formal de um problema — precisa virar Ordem de Serviço para ser executada. Dados via API_MAINTNOTIFICATION / QMELSet.</div>
         </div>
       </div>
+      <div class="kpi-num amber" id="kpi-notif">--</div>
+      <div class="kpi-meta mono" id="kpi-notif-meta"></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-grid">
-      
-      <!-- Activity Log Panel -->
-      <div class="panel">
-        <div class="panel-header">
-          <span>Activity Log</span>
-          <div class="indicator">
-            <div class="pulse"></div> Live
-          </div>
-        </div>
-        <div class="log-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Horário</th>
-                <th>Method</th>
-                <th>Endpoint SAP</th>
-                <th>Objeto SAP</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="log-body">
-              <tr>
-                <td colspan="5" style="text-align: center; color: #6b7280;">Carregando logs...</td>
-              </tr>
-            </tbody>
-          </table>
+    <!-- KPI 3: Ordens em Execução -->
+    <div class="kpi kpi-green">
+      <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--green);"></div>
+      <div class="kpi-lbl">
+        <span class="kpi-lbl-txt mono" id="kpi-lbl-orders">ORDENS EM EXECUÇÃO</span>
+        <div class="tip-wrap">
+          <div class="tip-icon">?</div>
+          <div class="tip-box">Ordens de Serviço já liberadas — a equipe de campo está trabalhando nelas agora. O KARL acompanha cada ordem e responde status via chat. Dados via API_MAINTENANCEORDER / AUFKSet.</div>
         </div>
       </div>
-      
-      <!-- Quick Actions Panel -->
-      <div class="panel">
-        <div class="panel-header">
-          Quick Actions
-        </div>
-        <div class="actions-list">
-          <button class="action-btn btn-create-nota" onclick="triggerAction('nota')">
-            <i>📝</i> Criar Nota de Manutenção
-          </button>
-          <button class="action-btn btn-create-ordem" onclick="triggerAction('ordem')">
-            <i>🔧</i> Abrir Ordem Corretiva
-          </button>
-          <button class="action-btn btn-consultar" onclick="triggerAction('criticos')">
-            <i>⚠️</i> Consultar Equipamentos Críticos
-          </button>
-        </div>
-      </div>
-      
+      <div class="kpi-num green" id="kpi-orders">--</div>
+      <div class="kpi-meta mono" id="kpi-orders-meta">PHASE: RELEASED</div>
     </div>
+
+    <!-- KPI 4: Planos Ativos -->
+    <div class="kpi kpi-purple">
+      <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--purple);"></div>
+      <div class="kpi-lbl">
+        <span class="kpi-lbl-txt mono" id="kpi-lbl-plans">PLANOS ATIVOS</span>
+        <div class="tip-wrap">
+          <div class="tip-icon">?</div>
+          <div class="tip-box">Planos de manutenção preventiva programados no SAP. O NEWTON calcula quando cada equipamento precisa de manutenção com base em MTBF/MTTR. Dados via API_MAINTPLAN / MMPTSet.</div>
+        </div>
+      </div>
+      <div class="kpi-num purple" id="kpi-plans">--</div>
+      <div class="kpi-meta mono" id="kpi-plans-meta">DIANA AUDITANDO</div>
+    </div>
+
   </div>
 
-  <div id="toast-container"></div>
+  <!-- ─── MAIN BODY ──────────────────────────────────────────────────── -->
+  <div id="main-body">
 
+    <!-- Left Column -->
+    <div id="col-left">
+      <div class="panel">
+        <div class="pnl-hdr">
+          <span class="pnl-title mono">STATUS DO PARQUE</span>
+          <div class="tip-wrap">
+            <div class="tip-icon">?</div>
+            <div class="tip-box">Mapa visual de todos os equipamentos da planta. Cada célula representa um ativo físico. Cores indicam estado operacional em tempo real via API_EQUIPMENT.</div>
+          </div>
+          <span class="pnl-tag mono" id="equip-badge">-- ATIVOS</span>
+        </div>
+        <div class="pnl-body">
+          <div class="eq-grid" id="eq-grid">
+            <!-- dots injected by JS -->
+          </div>
+          <div class="eq-legend">
+            <div class="eq-leg-item"><div class="eq-leg-dot op"></div>Operando</div>
+            <div class="eq-leg-item"><div class="eq-leg-dot al"></div>Alerta</div>
+            <div class="eq-leg-item"><div class="eq-leg-dot cr"></div>Crítico</div>
+            <div class="eq-leg-item"><div class="eq-leg-dot st"></div>Parado</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="pnl-hdr">
+          <span class="pnl-title mono">NOTIFICAÇÕES POR FASE</span>
+          <div class="tip-wrap">
+            <div class="tip-icon">?</div>
+            <div class="tip-box">Ciclo de vida no SAP PM: Pendente → problema detectado pelo KARL. Em Processo → equipe assumiu. Concluída → resolvida. Adiada → postergada com justificativa auditada pela DIANA.</div>
+          </div>
+          <span class="pnl-tag mono">API_MAINTNOTIF</span>
+        </div>
+        <div class="pnl-body">
+          <div>
+            <div class="bar-item">
+              <div class="bar-lbl mono">Pendentes</div>
+              <div class="bar-track"><div class="bar-fill" id="bar-outstanding" style="width:0%;background:var(--amber);"></div></div>
+              <div class="bar-num mono" id="bar-num-outstanding">0</div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-lbl mono">Em Processo</div>
+              <div class="bar-track"><div class="bar-fill" id="bar-inprocess" style="width:0%;background:var(--blue);"></div></div>
+              <div class="bar-num mono" id="bar-num-inprocess">0</div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-lbl mono">Concluídas</div>
+              <div class="bar-track"><div class="bar-fill" id="bar-completed" style="width:0%;background:var(--green);"></div></div>
+              <div class="bar-num mono" id="bar-num-completed">0</div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-lbl mono">Adiadas</div>
+              <div class="bar-track"><div class="bar-fill" id="bar-postponed" style="width:0%;background:var(--bg3);"></div></div>
+              <div class="bar-num mono" id="bar-num-postponed">0</div>
+            </div>
+          </div>
+          <div class="comp-wrap">
+            <div>
+              <div class="comp-label-row">
+                <span class="mono comp-lbl">CONFORMIDADE PREVENTIVA</span>
+                <div class="tip-wrap">
+                  <div class="tip-icon">?</div>
+                  <div class="tip-box">Percentual dos planos preventivos cumpridos no prazo. Calculado pelo NEWTON com dados do SAP. Meta ideal: acima de 80%.</div>
+                </div>
+              </div>
+              <div class="comp-num green" id="comp-rate">--%</div>
+              <div class="comp-detail mono" id="comp-detail">-- planos</div>
+              <div class="comp-warn mono" id="comp-warn"></div>
+            </div>
+            <svg id="comp-svg" width="56" height="56" viewBox="0 0 56 56" style="transform:rotate(-90deg);flex-shrink:0;">
+              <circle cx="28" cy="28" r="22" fill="none" stroke="var(--bg3)" stroke-width="5"/>
+              <circle id="comp-arc" cx="28" cy="28" r="22" fill="none" stroke="var(--green)"
+                      stroke-width="5" stroke-dasharray="0 138" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Column -->
+    <div id="col-center" class="panel" style="display:flex;flex-direction:column;height:100%;">
+      <div class="pnl-hdr">
+        <span class="pnl-title mono">THREAD DE AÇÕES DOS AGENTES</span>
+        <div class="tip-wrap">
+          <div class="tip-icon">?</div>
+          <div class="tip-box">Trilha de auditoria completa de tudo que os agentes executaram no SAP. Cada entrada registra quem agiu, qual chamada SAP foi feita, e o resultado. Rastreável e auditável — base do log de conformidade do AxiomGO.</div>
+        </div>
+        <span class="pnl-tag mono" id="thread-badge" style="color:var(--green);border-color:var(--green-dim);">● LIVE</span>
+      </div>
+      <div id="thread-list" style="padding:8px 10px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0;">
+        <!-- injected by JS -->
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div id="col-right">
+      <div class="panel">
+        <div class="pnl-hdr">
+          <span class="pnl-title mono">LOG DE CHAMADAS SAP</span>
+          <div class="tip-wrap">
+            <div class="tip-icon">?</div>
+            <div class="tip-box">Cada linha = uma chamada real à API do SAP feita pelos agentes. POST cria registros, GET consulta, PATCH atualiza. Prova técnica de que o AxiomGO está operando o SAP via API em tempo real.</div>
+          </div>
+          <span class="pnl-tag mono">API CALLS</span>
+        </div>
+        <div id="sap-log" style="padding:6px 10px;">
+          <!-- rows injected by JS -->
+        </div>
+      </div>
+      <div class="panel">
+        <div class="pnl-hdr">
+          <span class="pnl-title mono">COMO O USUÁRIO INTERAGE</span>
+          <div class="tip-wrap">
+            <div class="tip-icon">?</div>
+            <div class="tip-box">O usuário nunca toca no SAP diretamente. Fala com o AxiomGO em linguagem natural — os agentes traduzem para chamadas SAP e retornam o resultado em português.</div>
+          </div>
+        </div>
+        <div class="pnl-body">
+          <div style="background:var(--bg2);border:1px solid var(--border);padding:8px;font-family:'IBM Plex Mono';font-size:9px;line-height:1.9;">
+            <div style="color:var(--text2);">USUÁRIO →</div>
+            <div style="color:var(--text1);margin:2px 0 6px;">"Crie uma nota para a bomba do setor 3"</div>
+            <div style="color:var(--text2);">AXIOM → roteia para KARL</div>
+            <div style="color:var(--text2);">KARL → POST /API_MAINTNOTIFICATION</div>
+            <div style="color:var(--green);margin-top:4px;">✓ Nota criada no SAP · resposta via chat</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── FOOTER ─────────────────────────────────────────────────────── -->
+  <footer id="main-footer">
+    <div class="footer-stats">
+      <div class="footer-item">
+        <div class="footer-dot green"></div>
+        ECC: 88 testes
+      </div>
+      <div class="footer-item">
+        <div class="footer-dot green"></div>
+        S/4HANA: 38 testes
+      </div>
+      <div class="footer-item">
+        <div class="footer-dot green"></div>
+        Total: 126 aprovados
+      </div>
+    </div>
+
+    <div class="footer-right">
+      <div class="footer-item">
+        <div class="footer-dot blue"></div>
+        AxiomGO.AI · SAP PM Emulator v2.0
+      </div>
+      <div class="footer-item">
+        <div class="footer-dot purple"></div>
+        KARL · DIANA · NEWTON · AXIOM
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── INLINE JS ──────────────────────────────────────────────────── -->
   <script>
-    let currentMode = 'ecc';
+    // ── Clock ──────────────────────────────────────────────────────────
+    const clockEl = document.getElementById('clock');
+    function updateClock() {
+      clockEl.textContent = new Date().toTimeString().slice(0, 8);
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
 
-    // --- Mode Toggle ---
-    const setMode = (mode) => {
-      if (currentMode === mode) return;
-      currentMode = mode;
-      
-      // Update body class
-      document.body.className = `mode-${mode}`;
-      
-      // Update toggle buttons
-      document.getElementById('mode-ecc-btn').classList.toggle('active', mode === 'ecc');
-      document.getElementById('mode-s4-btn').classList.toggle('active', mode === 's4');
-      
-      // Update badge text
-      const badge = document.getElementById('mode-badge-text');
-      badge.textContent = mode === 'ecc' ? 'SAP ECC Emulator' : 'SAP S/4HANA Emulator';
-      
-      // Update KPI Titles
-      document.getElementById('kpi-title-1').textContent = mode === 'ecc' ? 'Total Equipamentos (EQUI)' : 'Total Equipment';
-      document.getElementById('kpi-title-2').textContent = mode === 'ecc' ? 'Notas Abertas (QMEL / ABER)' : 'Open Notifications';
-      document.getElementById('kpi-title-3').textContent = mode === 'ecc' ? 'Ordens em Execução (AUFK / REL)' : 'Released Orders';
-      document.getElementById('kpi-title-4').textContent = mode === 'ecc' ? 'Planos Preventivos (MMPT)' : 'Active Plans';
+    // ── MODE state ─────────────────────────────────────────────────────
+    const MODE = { current: 's4' };
 
-      // Reset values to show loading state slightly
-      document.getElementById('kpi-val-1').textContent = '-';
-      document.getElementById('kpi-val-2').textContent = '-';
-      document.getElementById('kpi-val-3').textContent = '-';
-      document.getElementById('kpi-val-4').textContent = '-';
+    // ── ECC / S4HANA Toggle ────────────────────────────────────────────
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        MODE.current = btn.dataset.mode;
+        loadKPIs();
+        loadPhases();
+        loadCompliance();
+        loadEquipmentGrid();
+      });
+    });
 
-      // Fetch new data
-      fetchKPIs();
-      fetchLogs();
-      if (mode === 's4') fetchS4Analytics();
-    };
-
-    // --- Utilities ---
-    const showToast = (message, isError = false) => {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = message;
-      if (isError) {
-         toast.style.borderLeftColor = 'var(--badge-delete)';
-      }
-      container.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.style.animation = 'fadeOut 0.3s ease-out forwards';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    };
-
-    const formatTime = (isoString) => {
-      const d = new Date(isoString);
-      return d.toLocaleTimeString('pt-BR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '.' + d.getMilliseconds().toString().padStart(3, '0');
-    };
-
-    // --- Terminology Mapping ---
-    const mapTerminology = (url) => {
-      if (url.includes('API_EQUIPMENT')) return 'Equipment (API)';
-      if (url.includes('API_MAINTNOTIFICATION')) return 'Notification (API)';
-      if (url.includes('API_MAINTENANCEORDER')) return 'Order (API)';
-      if (url.includes('API_MAINTPLAN')) return 'Maint. Plan (API)';
-      if (url.includes('PM_S4_ANALYTICS_SRV') || url.includes('API_ANALYTICS')) return 'S/4 Analytics';
-      
-      if (url.includes('PM_EQUIPMENT_SRV')) return 'Equipamento (EQUI)';
-      if (url.includes('PM_FUNCLOC_SRV')) return 'Local de Instalação (IFLOT)';
-      if (url.includes('PM_NOTIFICATION_SRV')) return 'Nota de Manutenção (QMEL)';
-      if (url.includes('PM_ORDER_SRV')) return 'Ordem de Manutenção (AUFK)';
-      if (url.includes('PM_MAINTPLAN_SRV')) return 'Plano de Manutenção (MMPT)';
-      if (url.includes('PM_MEASPOINT_SRV')) return 'Ponto de Medição (IMPTT)';
-      if (url.includes('PM_MATERIAL_SRV')) return 'Materiais (MARA/RESB/MSEG)';
-      if (url.includes('PM_ANALYTICS_SRV')) return 'Analytics / KPIs';
-      
-      return 'Serviço SAP OData';
-    };
-
-    // --- Fetch KPIs ---
-    const fetchKPIs = async () => {
+    // ── KPI Fetcher ────────────────────────────────────────────────────
+    async function safeFetch(url) {
       try {
-        if (currentMode === 'ecc') {
-          // Total EQUI
-          fetch('/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet?$count=true')
-            .then(r => r.json())
-            .then(data => {
-               document.getElementById('kpi-val-1').textContent = data.d?.__count || data.d?.results?.length || 0;
-            }).catch(console.error);
+        const r = await fetch(url);
+        return r.ok ? await r.json() : null;
+      } catch { return null; }
+    }
 
-          // Notas Abertas
-          fetch('/sap/opu/odata/sap/PM_NOTIFICATION_SRV/QMELSet?$filter=QMST eq \'ABER\'')
-            .then(r => r.json())
-            .then(data => {
-               document.getElementById('kpi-val-2').textContent = data.d?.results?.length || 0;
-            }).catch(console.error);
+    async function loadKPIs() {
+      const isECC = MODE.current === 'ecc';
 
-          // Ordens Execução
-          fetch('/sap/opu/odata/sap/PM_ORDER_SRV/AUFKSet?$filter=AUFST eq \'REL\'')
-            .then(r => r.json())
-            .then(data => {
-               document.getElementById('kpi-val-3').textContent = data.d?.results?.length || 0;
-            }).catch(console.error);
+      if (isECC) {
+        // ── ECC mode ──────────────────────────────────────────────────
+        document.getElementById('kpi-lbl-equip').textContent  = 'EQUIPAMENTOS (EQUI)';
+        document.getElementById('kpi-lbl-notif').textContent  = 'NOTAS ABERTAS (QMEL)';
+        document.getElementById('kpi-lbl-orders').textContent = 'ORDENS EM EXECUÇÃO (AUFK)';
+        document.getElementById('kpi-lbl-plans').textContent  = 'PLANOS PREVENTIVOS (MMPT)';
 
-          // Planos Preventivos
-          fetch('/sap/opu/odata/sap/PM_MAINTPLAN_SRV/MMPTSet?$count=true')
-            .then(r => r.json())
-            .then(data => {
-               document.getElementById('kpi-val-4').textContent = data.d?.__count || data.d?.results?.length || 0;
-            }).catch(console.error);
-            
-        } else {
-          // S/4HANA Mode
-          // Total Equipment
-          fetch('/sap/opu/odata/sap/API_EQUIPMENT/EquipmentCollection?$count=true')
-            .then(r => r.json())
-            .then(data => {
-               document.getElementById('kpi-val-1').textContent = data.d?.__count || 0;
-            }).catch(() => document.getElementById('kpi-val-1').textContent = 0);
-
-          // Open Notifications 
-          fetch('/sap/opu/odata/sap/API_MAINTNOTIFICATION/MaintenanceNotificationCollection?$filter=NotifProcessingPhase eq \'1\'&$count=true')
-            .then(r => r.json())
-            .then(data => {
-               let val = data.d?.__count;
-               if (val === undefined && data.d?.results) val = data.d.results.length;
-               document.getElementById('kpi-val-2').textContent = val || 0;
-            }).catch(() => document.getElementById('kpi-val-2').textContent = 0);
-
-          // Released Orders
-          fetch('/sap/opu/odata/sap/API_MAINTENANCEORDER/MaintenanceOrderCollection?$filter=MaintOrdProcessingPhase eq \'2\'&$count=true')
-            .then(r => r.json())
-            .then(data => {
-               let val = data.d?.__count;
-               if (val === undefined && data.d?.results) val = data.d.results.length;
-               document.getElementById('kpi-val-3').textContent = val || 0;
-            }).catch(() => document.getElementById('kpi-val-3').textContent = 0);
-
-          // Active Plans
-          fetch('/sap/opu/odata/sap/API_MAINTPLAN/MaintenancePlanCollection?$filter=MaintPlanIsActive eq \'true\'&$count=true')
-            .then(r => r.json())
-            .then(data => {
-               let val = data.d?.__count;
-               if (val === undefined && data.d?.results) val = data.d.results.length;
-               document.getElementById('kpi-val-4').textContent = val || 0;
-            }).catch(() => document.getElementById('kpi-val-4').textContent = 0);
+        // Equipment
+        const eqData = await safeFetch('/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet?$top=1000');
+        if (eqData) {
+          const count = eqData.d?.results?.length || 0;
+          document.getElementById('kpi-equip').textContent = count;
+          document.getElementById('kpi-equip-meta').textContent = `${count} EQUI`;
         }
-      } catch (err) {
-        console.error('Error fetching KPIs', err);
+
+        // Open Notifications (QMEL)
+        const notifData = await safeFetch("/sap/opu/odata/sap/PM_NOTIFICATION_SRV/QMELSet?$filter=QMST eq 'ABER'&$top=1000");
+        if (notifData) {
+          const count = notifData.d?.results?.length || 0;
+          document.getElementById('kpi-notif').textContent = count;
+          document.getElementById('kpi-notif-meta').textContent = `QMST: ABER`;
+        }
+
+        // Orders in execution (AUFK)
+        const ordersData = await safeFetch("/sap/opu/odata/sap/PM_ORDER_SRV/AUFKSet?$filter=AUFST eq 'REL'&$top=1000");
+        if (ordersData) {
+          const count = ordersData.d?.results?.length || 0;
+          document.getElementById('kpi-orders').textContent = count;
+          document.getElementById('kpi-orders-meta').textContent = `AUFST: REL`;
+        }
+
+        // Active plans (MMPT)
+        const plansData = await safeFetch('/sap/opu/odata/sap/PM_MAINTPLAN_SRV/MMPTSet?$top=1000');
+        if (plansData) {
+          const count = plansData.d?.results?.length || 0;
+          document.getElementById('kpi-plans').textContent = count;
+          document.getElementById('kpi-plans-meta').textContent = `MMPT`;
+        }
+
+      } else {
+        // ── S4HANA mode ───────────────────────────────────────────────
+        document.getElementById('kpi-lbl-equip').textContent  = 'EQUIPAMENTOS';
+        document.getElementById('kpi-lbl-notif').textContent  = 'NOTAS ABERTAS';
+        document.getElementById('kpi-lbl-orders').textContent = 'ORDENS EM EXECUÇÃO';
+        document.getElementById('kpi-lbl-plans').textContent  = 'PLANOS ATIVOS';
+
+        // Equipment
+        const eqData = await safeFetch('/sap/opu/odata/sap/API_EQUIPMENT/EquipmentCollection?$top=1000');
+        if (eqData) {
+          const count = eqData.d?.results?.length || 0;
+          document.getElementById('kpi-equip').textContent = count;
+          const res = eqData.d?.results || [];
+          if (res.length >= 2) {
+            const first = res[0].Equipment || '?';
+            const last  = res[res.length - 1].Equipment || '?';
+            document.getElementById('kpi-equip-meta').textContent = `${first} → ${last}`;
+          } else if (count > 0) {
+            document.getElementById('kpi-equip-meta').textContent = `${count} EQUIPAMENTOS`;
+          }
+        }
+
+        // Open Notifications
+        const notifData = await safeFetch("/sap/opu/odata/sap/API_MAINTNOTIFICATION/MaintenanceNotificationCollection?$filter=NotifProcessingPhase eq '1'&$top=1000");
+        if (notifData) {
+          const count = notifData.d?.results?.length || 0;
+          document.getElementById('kpi-notif').textContent = count;
+          const res = notifData.d?.results || [];
+          const high = res.filter(n => n.MaintNotifPriority === '1' || n.MaintNotifPriority === '2').length;
+          if (high > 0) document.getElementById('kpi-notif-meta').textContent = `${high}× PRIORIDADE ALTA`;
+        }
+
+        // Orders in execution
+        const ordersData = await safeFetch("/sap/opu/odata/sap/API_MAINTENANCEORDER/MaintenanceOrderCollection?$filter=MaintOrdProcessingPhase eq '2'&$top=1000");
+        if (ordersData) {
+          const count = ordersData.d?.results?.length || 0;
+          document.getElementById('kpi-orders').textContent = count;
+        }
+
+        // Active plans
+        const plansData = await safeFetch("/sap/opu/odata/sap/API_MAINTPLAN/MaintenancePlanCollection?$filter=MaintPlanIsActive eq 'true'&$top=1000");
+        if (plansData) {
+          const count = plansData.d?.results?.length || 0;
+          document.getElementById('kpi-plans').textContent = count;
+        }
       }
-    };
-    
-    // --- Fetch S4 Exclusive Analytics ---
-    const fetchS4Analytics = async () => {
-      try {
-        // Gauge: Compliance Rate
-        fetch('/sap/opu/odata/sap/PM_S4_ANALYTICS_SRV/MaintenancePlanCompliance')
-          .then(r => r.json())
-          .then(data => {
-             let rateStr = data.d?.complianceRate || '0.0%';
-             let rateVal = parseFloat(rateStr.replace('%', ''));
-             document.getElementById('compliance-text').textContent = rateStr;
-             // calculate rotation: -135deg to +45deg (range 180deg)
-             // rate 0% => -135deg, 100% => +45deg
-             let rotation = -135 + (rateVal / 100) * 180;
-             document.getElementById('compliance-gauge').style.transform = `rotate(${rotation}deg)`;
-          }).catch(console.error);
+    }
 
-        // Bar Chart: Notifications by Phase
-        fetch('/sap/opu/odata/sap/PM_S4_ANALYTICS_SRV/NotificationsByPhase')
-          .then(r => r.json())
-          .then(data => {
-             const results = data.d?.results || [];
-             const container = document.getElementById('phase-chart-container');
-             container.innerHTML = '';
-             let maxCount = Math.max(...results.map(r => parseInt(r.count, 10) || 0), 1);
-             
-             // Guarantee order or specific phases
-             const phasesExpected = [
-               { key: 'Outstanding', cls: 'bar-fill-Outstanding', label: 'Outstanding' },
-               { key: 'In Process', cls: 'bar-fill-In-Process', label: 'In Process' },
-               { key: 'Completed', cls: 'bar-fill-Completed', label: 'Completed' },
-               { key: 'Postponed', cls: 'bar-fill-Postponed', label: 'Postponed' }
-             ];
-             
-             // Reformat results as a map for quick lookup
-             const phaseMap = {};
-             results.forEach(r => phaseMap[r.phaseDesc] = parseInt(r.count,10)||0);
+    // ── Equipment Dot Grid ─────────────────────────────────────────────
+    async function loadEquipmentGrid() {
+      const isECC = MODE.current === 'ecc';
+      const url = isECC
+        ? '/sap/opu/odata/sap/PM_EQUIPMENT_SRV/EQUISet?$top=1000'
+        : '/sap/opu/odata/sap/API_EQUIPMENT/EquipmentCollection?$top=1000';
 
-             phasesExpected.forEach(p => {
-               let count = phaseMap[p.key] || 0;
-               let pct = (count / maxCount) * 100;
-               let div = document.createElement('div');
-               div.className = 'bar-item';
-               div.innerHTML = `
-                 <div class="bar-label">${p.label}</div>
-                 <div class="bar-track">
-                   <div class="bar-fill-inner ${p.cls}" style="width: 0%"></div>
-                 </div>
-                 <div class="bar-count">${count}</div>
-               `;
-               container.appendChild(div);
-               // Animate
-               setTimeout(() => {
-                 div.querySelector('.bar-fill-inner').style.width = `${pct}%`;
-               }, 50);
-             });
-          }).catch(console.error);
+      const data  = await safeFetch(url);
+      const grid  = document.getElementById('eq-grid');
+      const badge = document.getElementById('equip-badge');
+      if (!data) { grid.innerHTML = '<span style="color:var(--text2);font-size:9px;font-family:monospace">OFFLINE</span>'; return; }
 
-      } catch (err) {
-        console.error('Error fetching S4 Analytics', err);
+      const items = data.d?.results || [];
+      badge.textContent = `${items.length} ATIVOS`;
+
+      // Responsive: >40 items use 16-col grid
+      grid.className = items.length > 40 ? 'eq-grid wide' : 'eq-grid';
+
+      if (isECC) {
+        // ECC: IEQUI for ID, EQKTX for name, no IsDown → all green
+        grid.innerHTML = items.map((item, i) => {
+          const label = item.IEQUI || `EQ-${String(i+1).padStart(5,'0')}`;
+          const name  = item.EQKTX || label;
+          return `<div class="eq-dot eq-ok" title="${label}: ${name}"></div>`;
+        }).join('');
+      } else {
+        // S4HANA: status-based coloring
+        const getClass = (item) => {
+          const st = (item.StatusOfObject || item.MaintEquipStatObjCrntsts || '').toUpperCase();
+          if (st.includes('CRITI') || st.includes('CRIT')) return 'cr';
+          if (st.includes('ALERT') || st.includes('WARN')) return 'al';
+          if (st.includes('STOP') || st.includes('DOWN') || st.includes('INAC')) return 'st';
+          return 'op';
+        };
+        grid.innerHTML = items.map((item, i) => {
+          const cls   = getClass(item);
+          const label = item.Equipment || item.EquipId || `EQ-${String(i+1).padStart(5,'0')}`;
+          return `<div class="eq-dot ${cls}" title="${label}"></div>`;
+        }).join('');
       }
+    }
+
+    // ── Init ───────────────────────────────────────────────────────────
+    loadKPIs();
+    loadEquipmentGrid();
+    setInterval(() => { loadKPIs(); loadEquipmentGrid(); }, 30000);
+
+    // ── Agent Thread ───────────────────────────────────────────────────
+    const AGENT_META = {
+      AXM: { cls:'av-ax', label:'AXIOM', role:'Orchestrator' },
+      KRL: { cls:'av-kl', label:'KARL',  role:'PCM Executor' },
+      DIA: { cls:'av-di', label:'DIANA', role:'Compliance' },
+      NWT: { cls:'av-nw', label:'NEWTON',role:'Statistics' },
     };
 
-    // --- Fetch Logs ---
-    const fetchLogs = async () => {
+    const THREAD_INIT = [
+      { ag:'AXM', msg:'Usuário solicitou criação de nota para EQ-00003. Roteando para KARL.', sap:null, result:null, status:'done' },
+      { ag:'KRL', msg:'Criando Nota de Manutenção no SAP para bomba centrífuga EQ-00003.', sap:{m:'POST',ep:'API_MAINTNOTIF/MaintenanceNotificationCollection'}, result:'NF criada · Status: OUTSTANDING', status:'done' },
+      { ag:'AXM', msg:'Nota criada. Verificando criticidade do equipamento. Consultando NEWTON.', sap:null, result:null, status:'done' },
+      { ag:'NWT', msg:'Analisando histórico EQ-00003. MTTR médio: 4.2h · MTBF: 312h · Risco: ALTO.', sap:{m:'GET',ep:'PM_S4_ANALYTICS/CriticalEquipment'}, result:'Equipamento classificado como CRÍTICO', status:'done' },
+      { ag:'KRL', msg:'Liberando Ordem de Manutenção corretiva para execução imediata.', sap:{m:'POST',ep:'API_MAINTENANCEORDER/Release'}, result:'Ordem liberada · Phase: RELEASED', status:'done' },
+      { ag:'DIA', msg:'Auditando lançamento: validando campos obrigatórios e responsável técnico.', sap:{m:'GET',ep:'API_MAINTNOTIF/Collection(NF-0047)'}, result:'✓ Conformidade OK · Responsável: USR-007', status:'run' },
+    ];
+
+    const THREAD_LIVE = [
+      { ag:'AXM', msg:'Nova consulta: "status das notas abertas?". Roteando para NEWTON.', sap:null, result:null, status:'done' },
+      { ag:'NWT', msg:'Consultando distribuição de fases no SAP PM.', sap:{m:'GET',ep:'PM_S4_ANALYTICS/NotificationsByPhase'}, result:'Dados retornados com sucesso', status:'run' },
+      { ag:'DIA', msg:'Detectados registros sem responsável. Gerando alerta de conformidade.', sap:{m:'GET',ep:'API_MAINTNOTIF/Collection?$filter=PersonResponsible eq null'}, result:'⚠ Alerta de conformidade registrado', status:'run' },
+      { ag:'KRL', msg:'Atualizando status do equipamento após abertura de OS.', sap:{m:'PATCH',ep:'API_EQUIPMENT/EquipmentCollection(EQ-00003)'}, result:'EQ-00003 atualizado · IsDown: true', status:'done' },
+    ];
+
+    let threadItems = [...THREAD_INIT];
+    let liveIdx = 0;
+
+    function nowTime() {
+      return new Date().toTimeString().slice(0,8);
+    }
+
+    function buildThreadEl(item, isNew) {
+      const meta = AGENT_META[item.ag] || { cls:'av-ax', label:item.ag, role:'' };
+      const methodCls = item.sap ? `sap-${item.sap.m.toLowerCase()}` : '';
+      const dotCls = item.status === 'run' ? 'st-run' : 'st-done';
+      const el = document.createElement('div');
+      el.className = 'thread-item' + (isNew ? ' thread-new' : '');
+      el.innerHTML = `
+        <div class="thread-avatar ${meta.cls}">${meta.label.slice(0,2)}</div>
+        <div class="thread-content">
+          <div class="thread-meta">
+            <span class="thread-who">${meta.label}</span>
+            <span class="thread-role">${meta.role}</span>
+            <span class="thread-time">${item.ts || nowTime()}</span>
+          </div>
+          <div class="thread-msg">${item.msg}</div>
+          ${item.sap ? `<div class="thread-sap"><span class="${methodCls}">${item.sap.m}</span><span>${item.sap.ep}</span></div>` : ''}
+          ${item.result ? `<div class="thread-result"><span class="st-dot ${dotCls}"></span><span class="res-tag">${item.result}</span></div>` : ''}
+        </div>`;
+      return el;
+    }
+
+    function renderThread() {
+      const list = document.getElementById('thread-list');
+      if (!list) return;
+      list.innerHTML = '';
+      // Render newest on top
+      const visible = threadItems.slice(-8).reverse();
+      visible.forEach((item, i) => {
+        list.appendChild(buildThreadEl(item, i === 0 && item._new));
+      });
+    }
+
+    // Initial render
+    renderThread();
+
+    // Live entries every 6s
+    setInterval(() => {
+      const item = { ...THREAD_LIVE[liveIdx % THREAD_LIVE.length], ts: nowTime(), _new: true };
+      liveIdx++;
+      threadItems.push(item);
+      if (threadItems.length > 8) threadItems = threadItems.slice(-8);
+      renderThread();
+    }, 6000);
+
+    // ── SAP Log (from /api/logs) ────────────────────────────────────────
+    async function loadLog() {
       try {
         const res = await fetch('/api/logs');
-        let logs = await res.json();
-        
-        // Filter by mode
-        if (currentMode === 's4') {
-          logs = logs.filter(l => l.url.includes('API_') || l.url.includes('PM_S4_')).slice(0, 10);
-        } else {
-          // ECC mode show top 10 general logs, excluding new abstract API calls if we want to be strict, but keeping it simple
-          logs = logs.filter(l => !l.url.includes('API_') && !l.url.includes('PM_S4_')).slice(0, 10);
-        }
-        
-        const tbody = document.getElementById('log-body');
-        tbody.innerHTML = '';
-        
-        if (logs.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6b7280;">Nenhum request registrado ainda para este modo.</td></tr>';
-          return;
-        }
-
-        logs.forEach(log => {
-          const tr = document.createElement('tr');
-          
-          let statusClass = 'status-200';
-          if (log.status >= 400 && log.status < 500) statusClass = 'status-400';
-          if (log.status >= 500) statusClass = 'status-500';
-
-          tr.innerHTML = `
-            <td class="time-cell">${formatTime(log.timestamp)}</td>
-            <td><span class="badge ${log.method}">${log.method}</span></td>
-            <td><span class="endpoint-cell">${log.url.split('?')[0]}</span></td>
-            <td class="term-cell">${mapTerminology(log.url)}</td>
-            <td class="status-cell ${statusClass}">${log.status}</td>
-          `;
-          tbody.appendChild(tr);
+        const logs = await res.json();
+        const container = document.getElementById('sap-log');
+        if (!container) return;
+        container.innerHTML = '';
+        logs.slice(0, 8).forEach(log => {
+          const row = document.createElement('div');
+          row.className = 'log-row';
+          const method = log.method || 'GET';
+          const url = log.url || '';
+          const status = log.status || 200;
+          const time = log.timestamp ? new Date(log.timestamp).toTimeString().slice(0,8) : '--:--:--';
+          const shortUrl = url.replace('/sap/opu/odata/sap/', '');
+          const parts = shortUrl.split('/');
+          const svc = parts[0] || '';
+          const ep = '/' + parts.slice(1).join('/') || '';
+          row.innerHTML = `
+            <span class="log-t">${time}</span>
+            <span class="log-m log-${method.toLowerCase()}">${method}</span>
+            <span class="log-ep"><em>${svc}</em>${ep}</span>
+            <span class="log-s log-${status}">${status}</span>`;
+          container.appendChild(row);
         });
-      } catch (err) {
-        console.error('Error fetching logs', err);
-      }
-    };
+      } catch(e) {}
+    }
+    loadLog();
+    setInterval(loadLog, 5000);
 
-    // --- Quick Actions ---
-    const triggerAction = async (action) => {
+    // ── Phases Bar Chart ────────────────────────────────────────────────
+    async function loadPhases() {
       try {
-        let url, method, body, successMsg;
-        
-        if (currentMode === 'ecc') {
-          if (action === 'nota') {
-            url = '/sap/opu/odata/sap/PM_NOTIFICATION_SRV/QMELSet';
-            method = 'POST';
-            body = { EQUNR: '10000000', QMART: 'M2', QMTXT: 'Nota gerada pelo Dashboard AxionGO', PRIOK: '2' };
-            successMsg = 'Nota de Manutenção criada com sucesso!';
-          } else if (action === 'ordem') {
-            url = '/sap/opu/odata/sap/PM_ORDER_SRV/AUFKSet';
-            method = 'POST';
-            body = { EQUNR: '10000000', AUART: 'PM01', KTEXT: 'Ordem Corretiva - Dashboard', PRIOK: '1' };
-            successMsg = 'Ordem Corretiva aberta com sucesso!';
-          } else if (action === 'criticos') {
-            url = '/sap/opu/odata/sap/PM_ANALYTICS_SRV/CriticalEquipment';
-            method = 'GET';
-            body = null;
-            successMsg = 'Consulta de Equipamentos Críticos realizada!';
-          }
-        } else {
-          // S/4HANA actions map
-          if (action === 'nota') {
-            url = '/sap/opu/odata/sap/API_MAINTNOTIFICATION/MaintenanceNotificationCollection';
-            method = 'POST';
-            body = { Equipment: '10000000', NotificationType: 'M2', NotificationText: 'S/4HANA Notification from Dashboard', Priority: '2' };
-            successMsg = 'Notification successfully created!';
-          } else if (action === 'ordem') {
-            url = '/sap/opu/odata/sap/API_MAINTENANCEORDER/MaintenanceOrderCollection';
-            method = 'POST';
-            body = { Equipment: '10000000', MaintenanceOrderType: 'YA01', MaintenanceOrderDesc: 'S/4HANA Order - Dashboard', Priority: '1' };
-            successMsg = 'Maintenance Order successfully generated!';
-          } else if (action === 'criticos') {
-            url = '/sap/opu/odata/sap/PM_S4_ANALYTICS_SRV/CriticalEquipment';
-            method = 'GET';
-            body = null;
-            successMsg = 'Critical Equipment fetched!';
-          }
+        const res = await fetch('/sap/opu/odata/sap/PM_S4_ANALYTICS_SRV/NotificationsByPhase');
+        const data = await res.json();
+        const results = data.d?.results || [];
+        const total = results.reduce((s, r) => s + (parseInt(r.count) || 0), 0);
+        results.forEach(r => {
+          const map = {'1':'outstanding','2':'inprocess','3':'completed','4':'postponed'};
+          const id = map[r.phase];
+          if (!id) return;
+          const pct = total > 0 ? Math.round((parseInt(r.count) || 0) / total * 100) : 0;
+          const fill = document.getElementById('bar-' + id);
+          const num  = document.getElementById('bar-num-' + id);
+          if (fill) fill.style.width = pct + '%';
+          if (num)  num.textContent = r.count;
+        });
+      } catch(e) {}
+    }
+
+    // ── Compliance Gauge ────────────────────────────────────────────────
+    async function loadCompliance() {
+      try {
+        const res = await fetch('/sap/opu/odata/sap/PM_S4_ANALYTICS_SRV/MaintenancePlanCompliance');
+        const data = await res.json();
+        const d = data.d || {};
+        const rateEl   = document.getElementById('comp-rate');
+        const detailEl = document.getElementById('comp-detail');
+        const warnEl   = document.getElementById('comp-warn');
+        const arc      = document.getElementById('comp-arc');
+        if (rateEl)   rateEl.textContent   = d.complianceRate || '--%';
+        if (detailEl) detailEl.textContent  = `${d.total||0} planos · ${d.active||0} ativos · ${d.overdue||0} vencidos`;
+        if (warnEl && parseInt(d.overdue) > 0) warnEl.textContent = `⚠ ${d.overdue} plano(s) vencido(s)`;
+        if (arc) {
+          const pct = parseFloat(d.complianceRate) || 0;
+          const circumference = 2 * Math.PI * 22;
+          const dash = (pct / 100) * circumference;
+          arc.setAttribute('stroke-dasharray', `${dash.toFixed(1)} ${circumference.toFixed(1)}`);
         }
+      } catch(e) {}
+    }
 
-        const options = {
-          method,
-          headers: method !== 'GET' ? { 'Content-Type': 'application/json' } : undefined,
-          body: body ? JSON.stringify(body) : undefined
-        };
-
-        const res = await fetch(url, options);
-        if (res.ok) {
-          showToast(successMsg);
-          // Refresh KPIs and immediately fetch logs
-          fetchKPIs();
-          fetchLogs();
-          if (currentMode === 's4') fetchS4Analytics();
-        } else {
-          showToast('Erro ao executar a ação (Status HTTP: ' + res.status + ')', true);
-          fetchLogs();
-        }
-      } catch (err) {
-        showToast('Erro: Falha na requisição.', true);
-      }
-    };
-
-    // --- Initialization ---
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchKPIs();
-      fetchLogs();
-      
-      // Auto-refresh logs every 5 seconds
-      setInterval(fetchLogs, 5000);
-      
-      // Auto-refresh KPIs every 30 seconds
-      setInterval(() => {
-        fetchKPIs();
-        if (currentMode === 's4') fetchS4Analytics();
-      }, 30000); // Set to 30s as per requested
-    });
+    loadPhases();
+    loadCompliance();
+    setInterval(loadPhases, 30000);
+    setInterval(loadCompliance, 30000);
   </script>
+
 </body>
 </html>

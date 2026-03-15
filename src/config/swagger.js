@@ -3,7 +3,7 @@ const swaggerSpec = {
   info: {
     title: 'SAP PM Emulator API',
     version: '1.0.0',
-    description: 'SAP PM Emulator — AxionGO Integration Layer\n\nREST API that emulates SAP PM (Plant Maintenance) module endpoints. Responses follow the SAP OData format: `{ d: { results: [...] } }`.',
+    description: 'SAP PM Emulator — AxiomGO Integration Layer\n\nREST API that emulates SAP PM (Plant Maintenance) module endpoints. Responses follow the SAP OData format: `{ d: { results: [...] } }`.',
     contact: {
       name: 'SAP PM Emulator',
     },
@@ -11,7 +11,7 @@ const swaggerSpec = {
   servers: [
     {
       url: '/sap/opu/odata/sap',
-      description: 'SAP PM Emulator — AxionGO Integration Layer',
+      description: 'SAP PM Emulator — AxiomGO Integration Layer',
     },
   ],
   tags: [
@@ -22,7 +22,7 @@ const swaggerSpec = {
     { name: 'PM_MAINTPLAN_SRV', description: 'Planos de Manutenção Preventiva (MMPT, PLPO)' },
     { name: 'PM_MEASPOINT_SRV', description: 'Pontos de Medição (IMPTT)' },
     { name: 'PM_MATERIAL_SRV', description: 'Materiais e Movimentações (MARA, RESB, MSEG)' },
-    { name: 'PM_ANALYTICS_SRV', description: 'Consultas Analíticas (AxionGO AI)' },
+    { name: 'PM_ANALYTICS_SRV', description: 'Consultas Analíticas (AxiomGO AI)' },
   ],
   components: {
     schemas: {

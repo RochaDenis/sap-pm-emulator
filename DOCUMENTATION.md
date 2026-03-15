@@ -1,5 +1,5 @@
 # SAP PM Emulator — ECC Edition
-## AxionGO Integration Layer
+## AxiomGO Integration Layer
 
 ### 1. Overview
 This emulator provides a lightweight REST API designed to replicate the core behavior of the SAP ECC Plant Maintenance (PM) module. Built with Node.js and SQLite, it comes pre-loaded with rich, realistic industrial data representing a Brazilian petrochemical plant.
@@ -8,12 +8,12 @@ This emulator provides a lightweight REST API designed to replicate the core beh
 - **SAP ECC (ERP Central Component):** The classic, legacy ERP architecture. It relies heavily on traditional relational databases, monolithic tables (like `AUFK`, `MARA`, `QMEL`), German acronyms for technical fields, and complex BAPIs/RFCs.
 - **SAP S/4HANA:** The modern iteration built on the HANA in-memory database. It features simplified data models (e.g., the `ACDOCA` universal journal), Core Data Services (CDS) views, and a drastically different API landscape utilizing Fiori/OData V4.
 
-**AxionGO Integration:**
-AxionGO uses this emulator as an integration sandbox. By interacting with endpoints that mimic real SAP OData V2 payloads (formatted logically inside a `{ "d": { ... } }` or `{ "d": { "results": [...] } }` wrapper), the AI agent can learn, test, and predict maintenance workflows without risking a live SAP instance.
+**AxiomGO Integration:**
+AxiomGO uses this emulator as an integration sandbox. By interacting with endpoints that mimic real SAP OData V2 payloads (formatted logically inside a `{ "d": { ... } }` or `{ "d": { "results": [...] } }` wrapper), the AI agent can learn, test, and predict maintenance workflows without risking a live SAP instance.
 
 **Architecture Diagram:**
 ```text
-  [ AxionGO AI Agent ]
+  [ AxiomGO AI Agent ]
            |
    ( OData V2 / REST )
            v
@@ -182,7 +182,7 @@ Manages material master (`MARA`), reservations (`RESB`), and material documents/
 ```
 
 #### PM_ANALYTICS_SRV — Consultas Analíticas
-Read-only queries specifically designed for AxionGO dashboarding and AI reasoning.
+Read-only queries specifically designed for AxiomGO dashboarding and AI reasoning.
 - **Base URL:** `/PM_ANALYTICS_SRV`
 - **Endpoints:** 
   - `GET /EquipmentHistory('{EQUNR}')`
@@ -260,10 +260,10 @@ Read-only queries specifically designed for AxionGO dashboarding and AI reasonin
 
 ---
 
-### 6. AxionGO Integration Guide
+### 6. AxiomGO Integration Guide
 
 **Connection:**
-AxionGO agents must construct REST HTTP clients pointing to `/sap/opu/odata/sap`.
+AxiomGO agents must construct REST HTTP clients pointing to `/sap/opu/odata/sap`.
 Always anticipate the `{ "d": { ... } }` or `{ "d": { "results": [...] } }` JSON structure when parsing responses.
 
 **Environment Variables:**
@@ -409,7 +409,7 @@ npm run seed:s4     → Seed S/4HANA database (database-s4.db)
 npm test            → Run all 126 tests (ECC + S/4HANA)
 ```
 
-### AxionGO Agent Mapping
+### AxiomGO Agent Mapping
 
 | Agent | SAP Layer | Primary Service |
 |---|---|---|

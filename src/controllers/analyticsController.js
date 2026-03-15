@@ -1,7 +1,7 @@
 /**
  * Analytics Controller — Read-Only Analytical Queries
  * SAP OData conventions for PM_ANALYTICS_SRV
- * Used by AxionGO AI agent
+ * Used by AxiomGO AI agent
  */
 const { db } = require('../database');
 
