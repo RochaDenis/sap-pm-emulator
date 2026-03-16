@@ -2,8 +2,8 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const schema = require('./schema');
 
-// Use environment DB_PATH_S4 or fallback to ./database-s4.db relative to CWD
-const dbPath = path.resolve(process.cwd(), process.env.DB_PATH_S4 || './database-s4.db');
+// Use environment DB_PATH_S4 or fallback to ../../../database-s4.db relative to __dirname
+const dbPath = process.env.DB_PATH_S4 || path.join(__dirname, '../../../database-s4.db');
 const db = new Database(dbPath);
 
 // Enable foreign keys

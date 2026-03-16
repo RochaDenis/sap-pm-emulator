@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 // Determine the database path (fallback to standard local DB if ENV not set)
-const dbPath = process.env.V4_DB_PATH || path.resolve(__dirname, '../../../database-s4.db');
+const dbPath = process.env.DB_PATH_S4 || path.join(__dirname, '../../../database-s4.db');
 
 // Creates a new independent instance of sqlite3 database
 const db = new sqlite3.Database(dbPath, (err) => {

@@ -27,7 +27,7 @@ const { SCHEMA, TABLE_ORDER } = require('../database/schema');
 require('dotenv').config();
 
 // ─── Database connection ────────────────────────────────────────────────────
-const DB_PATH = process.env.DB_PATH || './database.db';
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, '../../database.db');
 const fs = require('fs');
 const dataDir = path.dirname(DB_PATH);
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });

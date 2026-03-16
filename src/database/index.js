@@ -11,7 +11,7 @@ const { SCHEMA, TABLE_ORDER } = require('./schema');
 require('dotenv').config();
 
 // Resolve DB file path — default to ./data/sap_pm.db
-const DB_PATH = process.env.DB_PATH || './database.db';
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, '../../database.db');
 
 // Ensure the data directory exists
 const fs = require('fs');

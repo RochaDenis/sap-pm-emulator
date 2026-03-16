@@ -2,7 +2,8 @@ const path = require('path');
 const Database = require('better-sqlite3');
 require('dotenv').config();
 
-const DB_PATH = process.env.DB_PATH || './database.db';
+// Resolve DB file path — default to ./data/sap_pm.db
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, '../../database.db');
 
 let db;
 

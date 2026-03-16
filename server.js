@@ -12,7 +12,7 @@ const { createLogger, getLogs } = require('./src/middleware/logger');
 const v4Router = require('./src/v4/routes/index');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // ─── Global Middleware ────────────────────────────────────────────────
 app.set('etag', false);
@@ -110,10 +110,11 @@ app.use((err, req, res, _next) => {
 });
 
 // ─── Start Server ─────────────────────────────────────────────────────
-if (require.main === module) {
+if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
-    console.log(`\n🔧 SAP PM Emulator running on http://localhost:${PORT}`);
-    console.log(`📄 API Docs available at http://localhost:${PORT}/api-docs\n`);
+    console.log(`[AxiomGO] Server running on port ${PORT}`);
+    console.log(`[AxiomGO] Dashboard: http://localhost:${PORT}/dashboard`);
+    console.log(`[AxiomGO] API Docs:  http://localhost:${PORT}/api-docs`);
   });
 }
 
