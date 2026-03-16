@@ -30,6 +30,11 @@ app.use(sapResponse);
 // ─── Static Files ─────────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ─── Root Redirect ────────────────────────────────────────────────────
+app.get('/', (req, res) => {
+  res.redirect('/dashboard');
+});
+
 // ─── Swagger Documentation ────────────────────────────────────────────
 // Combine ECC and S/4HANA tags and paths
 const combinedSwaggerSpec = {
