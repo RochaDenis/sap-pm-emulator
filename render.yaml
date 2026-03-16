@@ -5,9 +5,9 @@ services:
     region: oregon
     plan: free
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node scripts/start.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 3001
+        value: 10000
